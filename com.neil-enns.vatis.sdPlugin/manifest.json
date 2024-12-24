@@ -18,6 +18,22 @@
           "TitleAlignment": "middle"
         }
       ]
+    },
+    {
+      "Name": "ATIS letter",
+      "UUID": "com.neil-enns.vatis.atisletter",
+      "Icon": "images/actions/atisLetter/cloud-white",
+      "Tooltip": "Shows the current AITS letter for the specified station.",
+      "DisableAutomaticStates": true,
+      "UserTitleEnabled": false,
+      "PropertyInspectorPath": "ui/atisLetter.html",
+      "Controllers": ["Keypad"],
+      "States": [
+        {
+          "Image": "images/actions/default",
+          "TitleAlignment": "middle"
+        }
+      ]
     }
   ],
   "Category": "vATIS",
