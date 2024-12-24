@@ -4,6 +4,7 @@ import { Controller } from "@interfaces/controller";
 import TitleBuilder from "@root/utils/titleBuilder";
 import { stringOrUndefined } from "@root/utils/utils";
 import { BaseController } from "./baseController";
+import { NetworkConnectionStatus } from "@interfaces/messages";
 
 const StateColor = {
   CURRENT: "black",
@@ -21,7 +22,7 @@ const defaultUnavailableTemplatePath = "images/actions/atisLetter/template.svg";
 export class AtisLetterController extends BaseController {
   type = "AtisLetterController";
 
-  private _isUnavailable = false;
+  private _connectionStatus: NetworkConnectionStatus | null = null;
   private _isNewAtis = false;
   private _letter?: string;
   private _settings: AtisLetterSettings | null = null;
@@ -33,7 +34,8 @@ export class AtisLetterController extends BaseController {
   /**
    * Creates a new AtisLetterController object.
    * @param action The action
-   * @param settings: The options for the action
+   * @param settings:
+   * The options for the action
    */
   constructor(action: KeyAction, settings: AtisLetterSettings) {
     super(action);
@@ -46,7 +48,7 @@ export class AtisLetterController extends BaseController {
   public reset() {
     this._letter = undefined;
     this._isNewAtis = false;
-    this._isUnavailable = false;
+    this._connectionStatus = null;
 
     this.refreshTitle();
     this.refreshImage();
@@ -54,22 +56,28 @@ export class AtisLetterController extends BaseController {
 
   //#region Getters and setters
   /**
-   * Gets isUnavailable, which is true if no ATIS letter was available in the last VATSIM update.
+   * Gets isConnected, which is true if the connection status is Connected.
    */
-  get isUnavailable() {
-    return this._isUnavailable;
+  get isConnected() {
+    return this._connectionStatus === NetworkConnectionStatus.Connected;
+  }
+
+  /**
+   * Gets the connectionStatus.
+   */
+  get connectionStatus() {
+    return this._connectionStatus;
   }
 
   /*
-   * Sets isUnavailable and updates the action state, which is true if no ATIS letter was available
-   * in the last VATSIM update.
+   * Sets the connectionStatus and updates the action state.
    */
-  set isUnavailable(newValue: boolean) {
-    if (this._isUnavailable === newValue) {
+  set connectionStatus(newValue: NetworkConnectionStatus | null) {
+    if (this._connectionStatus === newValue) {
       return;
     }
 
-    this._isUnavailable = newValue;
+    this._connectionStatus = newValue;
     this.refreshImage();
   }
 
@@ -215,7 +223,7 @@ export class AtisLetterController extends BaseController {
       title: this.title,
     };
 
-    if (this.isUnavailable) {
+    if (this.isConnected) {
       this.setImage(this.unavailableImagePath, {
         ...replacements,
         stateColor: StateColor.CURRENT,
