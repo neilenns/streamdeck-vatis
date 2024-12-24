@@ -156,6 +156,7 @@ class ActionManager extends EventEmitter {
       .filter((action) => action.station === data.value.station)
       .forEach((action) => {
         action.letter = data.value.atisLetter;
+        action.isUpdated = data.value.isNewAtis ?? false;
       });
   }
 

@@ -23,7 +23,7 @@ export class AtisLetterController extends BaseController {
 
   private _autoClearTimeout?: NodeJS.Timeout;
   private _isUnavailable = false;
-  private _isUpdated = false;
+  private _isNewAtis = false;
   private _letter?: string;
   private _settings: AtisLetterSettings | null = null;
 
@@ -46,7 +46,7 @@ export class AtisLetterController extends BaseController {
    */
   public reset() {
     this._letter = undefined;
-    this._isUpdated = false;
+    this._isNewAtis = false;
     this._isUnavailable = false;
 
     this.refreshTitle();
@@ -177,7 +177,7 @@ export class AtisLetterController extends BaseController {
    * Gets the isUpdated state on the action.
    */
   public get isUpdated() {
-    return this._isUpdated;
+    return this._isNewAtis;
   }
 
   /**
@@ -189,7 +189,7 @@ export class AtisLetterController extends BaseController {
       this._autoClearTimeout = undefined;
     }
 
-    this._isUpdated = newValue;
+    this._isNewAtis = newValue;
 
     if (this.isUpdated && this.autoClear) {
       this._autoClearTimeout = setTimeout(() => {
@@ -212,15 +212,6 @@ export class AtisLetterController extends BaseController {
    * Sets the current AITS letter.
    */
   set letter(newLetter: string | undefined) {
-    // This crazy check catches two situations where the state should not show as updated:
-    // 1. The first time the letter is set on the action
-    // 2. Any time the letter is set to undefined to reset the action
-    if (this._letter && newLetter && this._letter !== newLetter) {
-      this.isUpdated = true;
-    } else {
-      this.isUpdated = false;
-    }
-
     this._letter = newLetter;
     this.refreshTitle();
     this.refreshImage(); // For cases where the state is fully responsible for displaying the content
