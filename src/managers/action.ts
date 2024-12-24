@@ -194,7 +194,7 @@ class ActionManager extends EventEmitter {
     }
 
     savedAction.reset();
-    vAtisManager.refreshAll();
+    vAtisManager.refreshAtis(savedAction.station);
 
     action.showOk().catch((error: unknown) => {
       handleAsyncException("Unable to show OK on ATIS button:", error);
