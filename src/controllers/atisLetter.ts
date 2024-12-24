@@ -21,7 +21,6 @@ const defaultUnavailableTemplatePath = "images/actions/atisLetter/template.svg";
 export class AtisLetterController extends BaseController {
   type = "AtisLetterController";
 
-  private _autoClearTimeout?: NodeJS.Timeout;
   private _isUnavailable = false;
   private _isNewAtis = false;
   private _letter?: string;
@@ -54,13 +53,6 @@ export class AtisLetterController extends BaseController {
   }
 
   //#region Getters and setters
-  /**
-   * Gets the autoClear setting, returning true as default if it wasn't set.
-   */
-  get autoClear() {
-    return this.settings.autoClear ?? true;
-  }
-
   /**
    * Gets isUnavailable, which is true if no ATIS letter was available in the last VATSIM update.
    */
@@ -184,19 +176,7 @@ export class AtisLetterController extends BaseController {
    * Sets the isUpdated state on the action and refreshes the state image to match.
    */
   public set isNewAtis(newValue: boolean) {
-    if (this._autoClearTimeout) {
-      clearTimeout(this._autoClearTimeout);
-      this._autoClearTimeout = undefined;
-    }
-
     this._isNewAtis = newValue;
-
-    if (this.isNewAtis && this.autoClear) {
-      this._autoClearTimeout = setTimeout(() => {
-        this._autoClearTimeout = undefined;
-        this.isNewAtis = false; // Using the setter to force refreshImage and the timeout to clear.
-      }, 1000 * 60 * 2); // Two minute timeout
-    }
 
     this.refreshImage();
   }

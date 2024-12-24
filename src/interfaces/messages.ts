@@ -20,4 +20,11 @@ export interface GetAtis {
   };
 }
 
-export type OutgoingMessage = GetAtis;
+export interface AcknowledgeAtisUpdate {
+  type: "acknowledgeAtisUpdate";
+  value?: {
+    station: string;
+  };
+}
+
+export type OutgoingMessage = GetAtis | AcknowledgeAtisUpdate;

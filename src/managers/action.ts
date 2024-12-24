@@ -169,11 +169,15 @@ class ActionManager extends EventEmitter {
       (entry) => entry.action.id === action.id
     );
 
-    if (!savedAction) {
+    if (!savedAction?.station) {
       return;
     }
 
-    savedAction.isNewAtis = false;
+    // Send a clear request to vATIS
+    vAtisManager.sendMessage({
+      type: "acknowledgeAtisUpdate",
+      value: { station: savedAction.station },
+    });
   }
 
   /**

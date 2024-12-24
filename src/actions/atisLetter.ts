@@ -69,7 +69,6 @@ export class AtisLetter extends SingletonAction<AtisLetterSettings> {
 }
 
 export interface AtisLetterSettings {
-  autoClear?: boolean;
   station?: string;
   currentImagePath?: string;
   showLetter?: boolean;
