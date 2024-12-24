@@ -5,9 +5,14 @@ import { KeyAction } from "@elgato/streamdeck";
 import { stringOrUndefined } from "@utils/utils";
 import TitleBuilder from "@utils/titleBuilder";
 
-const StateColor = {
+const SunStateColor = {
   NOT_CONNECTED: "black",
-  CONNECTED: "#5fcdfa",
+  CONNECTED: "#febd01",
+};
+
+const CloudStateColor = {
+  NOT_CONNECTED: "black",
+  CONNECTED: "#ebecec",
 };
 
 const defaultTemplatePath = "images/actions/vAtisStatus/template.svg";
@@ -148,14 +153,16 @@ export class vAtisStatusController extends BaseController {
     if (this.isConnected) {
       this.setImage(this.connectedImagePath, {
         ...replacements,
-        stateColor: StateColor.CONNECTED,
+        sunStateColor: SunStateColor.CONNECTED,
+        cloudStateColor: CloudStateColor.CONNECTED,
         state: "connected",
       });
       return;
     }
 
     this.setImage(this.notConnectedImagePath, {
-      stateColor: StateColor.NOT_CONNECTED,
+      sunStateColor: SunStateColor.NOT_CONNECTED,
+      cloudStateColor: CloudStateColor.NOT_CONNECTED,
       state: "notConnected",
     });
   }
