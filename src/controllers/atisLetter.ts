@@ -176,14 +176,14 @@ export class AtisLetterController extends BaseController {
   /**
    * Gets the isUpdated state on the action.
    */
-  public get isUpdated() {
+  public get isNewAtis() {
     return this._isNewAtis;
   }
 
   /**
    * Sets the isUpdated state on the action and refreshes the state image to match.
    */
-  public set isUpdated(newValue: boolean) {
+  public set isNewAtis(newValue: boolean) {
     if (this._autoClearTimeout) {
       clearTimeout(this._autoClearTimeout);
       this._autoClearTimeout = undefined;
@@ -191,10 +191,10 @@ export class AtisLetterController extends BaseController {
 
     this._isNewAtis = newValue;
 
-    if (this.isUpdated && this.autoClear) {
+    if (this.isNewAtis && this.autoClear) {
       this._autoClearTimeout = setTimeout(() => {
         this._autoClearTimeout = undefined;
-        this.isUpdated = false; // Using the setter to force refreshImage and the timeout to clear.
+        this.isNewAtis = false; // Using the setter to force refreshImage and the timeout to clear.
       }, 1000 * 60 * 2); // Two minute timeout
     }
 
@@ -244,7 +244,7 @@ export class AtisLetterController extends BaseController {
       return;
     }
 
-    if (this.isUpdated) {
+    if (this.isNewAtis) {
       this.setImage(this.updatedImagePath, {
         ...replacements,
         stateColor: StateColor.UPDATED,
