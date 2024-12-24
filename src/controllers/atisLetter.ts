@@ -136,17 +136,31 @@ export class AtisLetterController extends BaseController {
   }
 
   /**
-   * Returns the showTitle setting, or true if undefined.
+   * Returns the showTitle setting, or false if undefined.
    */
   get showTitle() {
-    return this.settings.showTitle ?? true;
+    return this.settings.showTitle ?? false;
   }
 
   /**
-   * Returns the showLetter setting, or true if undefined.
+   * Returns the showLetter setting, or false if undefined.
    */
   get showLetter() {
-    return this.settings.showLetter ?? true;
+    return this.settings.showLetter ?? false;
+  }
+
+  /**
+   * Returns the showAltimeter setting, or false if undefined.
+   */
+  get showAltimeter() {
+    return this.settings.showAltimeter ?? false;
+  }
+
+  /**
+   * Returns the showWind setting, or false if undefined.
+   */
+  get showWind() {
+    return this.settings.showWind ?? false;
   }
 
   /**
@@ -293,6 +307,8 @@ export class AtisLetterController extends BaseController {
 
     title.push(this.title, this.showTitle);
     title.push(this.letter ?? "ATIS", this.showLetter);
+    title.push(this.wind, this.showWind);
+    title.push(this.altimeter, this.showAltimeter);
 
     this.setTitle(title.join("\n"));
   }

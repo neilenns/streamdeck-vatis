@@ -69,10 +69,12 @@ export class AtisLetter extends SingletonAction<AtisLetterSettings> {
 }
 
 export interface AtisLetterSettings {
-  station?: string;
+  showAltimeter?: boolean;
+  showWind?: boolean;
   currentImagePath?: string;
   showLetter?: boolean;
   showTitle?: boolean;
+  station?: string;
   title?: string;
   unavailableImagePath?: string;
   updatedImagePath?: string;
