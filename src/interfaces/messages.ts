@@ -1,7 +1,14 @@
+export enum NetworkConnectionStatus {
+  Connected = "Connected",
+  Connecting = "Connecting",
+  Disconnected = "Disconnected",
+  Observer = "Observer",
+}
+
 export interface Atis {
   type: "atis";
   value: {
-    networkConnectionStatus?: string;
+    networkConnectionStatus?: NetworkConnectionStatus;
     textAtis?: string;
     station?: string;
     atisType?: string;

@@ -157,6 +157,8 @@ class ActionManager extends EventEmitter {
       .forEach((action) => {
         action.letter = data.value.atisLetter;
         action.isNewAtis = data.value.isNewAtis ?? false;
+        action.wind = data.value.wind;
+        action.altimeter = data.value.altimeter;
       });
   }
 

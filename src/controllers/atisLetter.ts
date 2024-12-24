@@ -4,6 +4,7 @@ import { Controller } from "@interfaces/controller";
 import TitleBuilder from "@root/utils/titleBuilder";
 import { stringOrUndefined } from "@root/utils/utils";
 import { BaseController } from "./baseController";
+import { NetworkConnectionStatus } from "@interfaces/messages";
 
 const StateColor = {
   CURRENT: "black",
@@ -21,9 +22,11 @@ const defaultUnavailableTemplatePath = "images/actions/atisLetter/template.svg";
 export class AtisLetterController extends BaseController {
   type = "AtisLetterController";
 
-  private _isUnavailable = false;
+  private _connectionStatus: NetworkConnectionStatus | null = null;
   private _isNewAtis = false;
   private _letter?: string;
+  private _wind?: string;
+  private _altimeter?: string;
   private _settings: AtisLetterSettings | null = null;
 
   private _currentImagePath?: string;
@@ -33,7 +36,8 @@ export class AtisLetterController extends BaseController {
   /**
    * Creates a new AtisLetterController object.
    * @param action The action
-   * @param settings: The options for the action
+   * @param settings:
+   * The options for the action
    */
   constructor(action: KeyAction, settings: AtisLetterSettings) {
     super(action);
@@ -46,7 +50,7 @@ export class AtisLetterController extends BaseController {
   public reset() {
     this._letter = undefined;
     this._isNewAtis = false;
-    this._isUnavailable = false;
+    this._connectionStatus = null;
 
     this.refreshTitle();
     this.refreshImage();
@@ -54,22 +58,28 @@ export class AtisLetterController extends BaseController {
 
   //#region Getters and setters
   /**
-   * Gets isUnavailable, which is true if no ATIS letter was available in the last VATSIM update.
+   * Gets isConnected, which is true if the connection status is Connected.
    */
-  get isUnavailable() {
-    return this._isUnavailable;
+  get isConnected() {
+    return this._connectionStatus === NetworkConnectionStatus.Connected;
+  }
+
+  /**
+   * Gets the connectionStatus.
+   */
+  get connectionStatus() {
+    return this._connectionStatus;
   }
 
   /*
-   * Sets isUnavailable and updates the action state, which is true if no ATIS letter was available
-   * in the last VATSIM update.
+   * Sets the connectionStatus and updates the action state.
    */
-  set isUnavailable(newValue: boolean) {
-    if (this._isUnavailable === newValue) {
+  set connectionStatus(newValue: NetworkConnectionStatus | null) {
+    if (this._connectionStatus === newValue) {
       return;
     }
 
-    this._isUnavailable = newValue;
+    this._connectionStatus = newValue;
     this.refreshImage();
   }
 
@@ -126,17 +136,31 @@ export class AtisLetterController extends BaseController {
   }
 
   /**
-   * Returns the showTitle setting, or true if undefined.
+   * Returns the showTitle setting, or false if undefined.
    */
   get showTitle() {
-    return this.settings.showTitle ?? true;
+    return this.settings.showTitle ?? false;
   }
 
   /**
-   * Returns the showLetter setting, or true if undefined.
+   * Returns the showLetter setting, or false if undefined.
    */
   get showLetter() {
-    return this.settings.showLetter ?? true;
+    return this.settings.showLetter ?? false;
+  }
+
+  /**
+   * Returns the showAltimeter setting, or false if undefined.
+   */
+  get showAltimeter() {
+    return this.settings.showAltimeter ?? false;
+  }
+
+  /**
+   * Returns the showWind setting, or false if undefined.
+   */
+  get showWind() {
+    return this.settings.showWind ?? false;
   }
 
   /**
@@ -198,6 +222,38 @@ export class AtisLetterController extends BaseController {
   }
 
   /**
+   * Gets the current wind.
+   */
+  get wind(): string | undefined {
+    return this._wind;
+  }
+
+  /**
+   * Sets the current wind.
+   */
+  set wind(newWind: string | undefined) {
+    this._wind = newWind;
+    this.refreshTitle();
+    this.refreshImage(); // For cases where the state is fully responsible for displaying the content
+  }
+
+  /**
+   * Gets the current altimeter.
+   */
+  get altimeter(): string | undefined {
+    return this._altimeter;
+  }
+
+  /**
+   * Sets the current altimeter
+   */
+  set altimeter(newAltimeter: string | undefined) {
+    this._altimeter = newAltimeter;
+    this.refreshTitle();
+    this.refreshImage(); // For cases where the state is fully responsible for displaying the content
+  }
+
+  /**
    * Convenience method to return the action's title from settings.
    */
   get title() {
@@ -213,9 +269,12 @@ export class AtisLetterController extends BaseController {
       station: this.station,
       letter: this.letter,
       title: this.title,
+      altimeter: this.altimeter,
+      wind: this.wind,
+      isConnected: this.isConnected,
     };
 
-    if (this.isUnavailable) {
+    if (!this.isConnected) {
       this.setImage(this.unavailableImagePath, {
         ...replacements,
         stateColor: StateColor.CURRENT,
@@ -248,6 +307,8 @@ export class AtisLetterController extends BaseController {
 
     title.push(this.title, this.showTitle);
     title.push(this.letter ?? "ATIS", this.showLetter);
+    title.push(this.wind, this.showWind);
+    title.push(this.altimeter, this.showAltimeter);
 
     this.setTitle(title.join("\n"));
   }
