@@ -6,7 +6,17 @@
 		],
 		"module": "ES2022",
 		"moduleResolution": "Bundler",
-		"noImplicitOverride": true
+		"noImplicitOverride": true,
+		"paths": {
+      "@actions/*": ["./src/actions/*"],
+      "@controllers/*": ["./src/controllers/*"],
+      "@eventHandlers/*": ["./src/eventHandlers/*"],
+      "@helpers/*": ["./src/helpers/*"],
+      "@interfaces/*": ["./src/interfaces/*"],
+      "@managers/*": ["./src/managers/*"],
+      "@utils/*": ["./src/utils/*"],
+      "@root/*": ["./src/*"]
+    }
 	},
 	"include": [
 		"src/**/*.ts"
