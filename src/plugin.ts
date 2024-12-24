@@ -8,6 +8,10 @@ import { handleConnected } from "@eventHandlers/vAtis/connected";
 import { handleDisconnected } from "@eventHandlers/vAtis/disconnected";
 import { handleActionAdded } from "@eventHandlers/action/actionAdded";
 import { handleActionRemoved } from "@eventHandlers/action/actionRemoved";
+import { AtisLetter } from "@actions/atisLetter";
+import { handleAtisLetterAdded } from "@eventHandlers/action/atisLetterAdded";
+import { handleAtisLetterUpdated } from "@eventHandlers/action/atisLetterUpdated";
+import { handleAtisUpdate } from "@eventHandlers/vAtis/atisUpdate";
 
 const logger = mainLogger.child({ service: "plugin" });
 
@@ -19,9 +23,11 @@ process.on("uncaughtException", (error) => {
   logger.error("Uncaught Exception:", error);
 });
 
-// Register the increment action.
+// Register actions
 streamDeck.actions.registerAction(new vAtisAudioStatus());
+streamDeck.actions.registerAction(new AtisLetter());
 
+// Register event handlers
 vAtisManager.on("connected", () => {
   disconnectHandled = false;
   handleConnected();
@@ -33,9 +39,12 @@ vAtisManager.on("disconnected", () => {
     handleDisconnected();
   }
 });
+vAtisManager.on("atisUpdate", handleAtisUpdate);
 
 actionManager.on("actionAdded", handleActionAdded);
 actionManager.on("actionRemoved", handleActionRemoved);
+actionManager.on("atisLetterAdded", handleAtisLetterAdded);
+actionManager.on("atisLetterUpdated", handleAtisLetterUpdated);
 
 // Finally, connect to the Stream Deck.
 await streamDeck.connect();
