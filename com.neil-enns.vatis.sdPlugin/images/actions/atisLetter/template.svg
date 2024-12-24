@@ -4,4 +4,6 @@
 		fill="white">{{title}}</text>
 	<text x="72" y="92" fill="white" font-family="Verdana" font-weight="bold" font-size="50" text-anchor="middle">{{#if
 		letter}}{{letter}}{{else}}ATIS{{/if}}</text>
+	<text x="72" y="130" font-family="Verdana" font-weight="bold" font-size="22" text-anchor="middle"
+		fill="white">{{altimeter}}</text>
 </svg>

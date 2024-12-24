@@ -25,6 +25,8 @@ export class AtisLetterController extends BaseController {
   private _connectionStatus: NetworkConnectionStatus | null = null;
   private _isNewAtis = false;
   private _letter?: string;
+  private _wind?: string;
+  private _altimeter?: string;
   private _settings: AtisLetterSettings | null = null;
 
   private _currentImagePath?: string;
@@ -206,6 +208,38 @@ export class AtisLetterController extends BaseController {
   }
 
   /**
+   * Gets the current wind.
+   */
+  get wind(): string | undefined {
+    return this._wind;
+  }
+
+  /**
+   * Sets the current wind.
+   */
+  set wind(newWind: string | undefined) {
+    this._wind = newWind;
+    this.refreshTitle();
+    this.refreshImage(); // For cases where the state is fully responsible for displaying the content
+  }
+
+  /**
+   * Gets the current altimeter.
+   */
+  get altimeter(): string | undefined {
+    return this._altimeter;
+  }
+
+  /**
+   * Sets the current altimeter
+   */
+  set altimeter(newAltimeter: string | undefined) {
+    this._altimeter = newAltimeter;
+    this.refreshTitle();
+    this.refreshImage(); // For cases where the state is fully responsible for displaying the content
+  }
+
+  /**
    * Convenience method to return the action's title from settings.
    */
   get title() {
@@ -221,9 +255,12 @@ export class AtisLetterController extends BaseController {
       station: this.station,
       letter: this.letter,
       title: this.title,
+      altimeter: this.altimeter,
+      wind: this.wind,
+      isConnected: this.isConnected,
     };
 
-    if (this.isConnected) {
+    if (!this.isConnected) {
       this.setImage(this.unavailableImagePath, {
         ...replacements,
         stateColor: StateColor.CURRENT,
