@@ -138,7 +138,9 @@ class ActionManager extends EventEmitter {
       return;
     }
 
-    const requiresRefresh = savedAction.settings.callsign !== settings.callsign;
+    const requiresRefresh =
+      savedAction.settings.station !== settings.station ||
+      savedAction.settings.atisType !== settings.atisType;
 
     savedAction.settings = settings;
 
@@ -153,7 +155,11 @@ class ActionManager extends EventEmitter {
    */
   public updateAtisLetter(data: Atis) {
     this.getAtisLetterControllers()
-      .filter((action) => action.station === data.value.station)
+      .filter(
+        (action) =>
+          action.station === data.value.station &&
+          action.atisType === data.value.atisType
+      )
       .forEach((action) => {
         action.letter = data.value.atisLetter;
         action.isNewAtis = data.value.isNewAtis ?? false;

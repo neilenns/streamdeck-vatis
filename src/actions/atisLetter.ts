@@ -7,6 +7,7 @@ import {
   WillAppearEvent,
   WillDisappearEvent,
 } from "@elgato/streamdeck";
+import { AtisType } from "@interfaces/messages";
 import actionManager from "@managers/action";
 import { LONG_PRESS_THRESHOLD } from "@utils/constants";
 
@@ -69,6 +70,7 @@ export class AtisLetter extends SingletonAction<AtisLetterSettings> {
 }
 
 export interface AtisLetterSettings {
+  atisType?: AtisType;
   showAltimeter?: boolean;
   showWind?: boolean;
   currentImagePath?: string;
