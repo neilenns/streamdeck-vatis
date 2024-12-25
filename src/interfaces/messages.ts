@@ -5,13 +5,19 @@ export enum NetworkConnectionStatus {
   Observer = "Observer",
 }
 
+export enum AtisType {
+  Combined = "Combined",
+  Departure = "Departure",
+  Arrival = "Arrival",
+}
+
 export interface Atis {
   type: "atis";
   value: {
     networkConnectionStatus?: NetworkConnectionStatus;
     textAtis?: string;
     station?: string;
-    atisType?: string;
+    atisType?: AtisType;
     metar?: string;
     wind?: string;
     altimeter?: string;
@@ -24,6 +30,7 @@ export interface GetAtis {
   type: "getAtis";
   value?: {
     station: string;
+    atisType: AtisType;
   };
 }
 
@@ -31,6 +38,7 @@ export interface AcknowledgeAtisUpdate {
   type: "acknowledgeAtisUpdate";
   value?: {
     station: string;
+    atisType: AtisType;
   };
 }
 

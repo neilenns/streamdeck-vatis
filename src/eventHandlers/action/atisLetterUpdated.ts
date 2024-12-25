@@ -7,5 +7,5 @@ import vAtisManager from "@managers/vatis";
  */
 export const handleAtisLetterUpdated = (controller: AtisLetterController) => {
   controller.letter = undefined;
-  vAtisManager.refreshAtis(controller.station);
+  vAtisManager.refreshAtis(controller.station, controller.atisType);
 };

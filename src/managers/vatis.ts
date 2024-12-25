@@ -1,4 +1,4 @@
-import { Atis, OutgoingMessage } from "@interfaces/messages";
+import { Atis, AtisType, OutgoingMessage } from "@interfaces/messages";
 import mainLogger from "@utils/logger";
 import EventEmitter from "events";
 import WebSocket from "ws";
@@ -148,12 +148,12 @@ class VatisManager extends EventEmitter {
    * Sends a message to vATIS to get the ATIS for a specific station.
    * @param station Station to refresh
    */
-  public refreshAtis(station?: string) {
-    if (!station || !this.isConnected) {
+  public refreshAtis(station?: string, atisType?: AtisType) {
+    if (!station || !atisType || !this.isConnected) {
       return;
     }
 
-    this.sendMessage({ type: "getAtis", value: { station } });
+    this.sendMessage({ type: "getAtis", value: { station, atisType } });
   }
 
   /**

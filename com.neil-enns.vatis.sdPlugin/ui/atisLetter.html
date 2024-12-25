@@ -21,6 +21,18 @@
       ></sdpi-textfield>
     </sdpi-item>
 
+    <sdpi-item label="Type">
+      <sdpi-select
+        setting="atisType"
+        default="Combined"
+        placeholder="Select an ATIS type"
+      >
+        <option value="Arrival">Arrival</option>
+        <option value="Combined">Combined</option>
+        <option value="Departure">Departure</option>
+      </sdpi-select>
+    </sdpi-item>
+
     <sdpi-item label="Current">
       <sdpi-file
         setting="currentImagePath"

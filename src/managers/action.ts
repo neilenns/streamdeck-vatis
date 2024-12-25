@@ -1,21 +1,21 @@
-import { EventEmitter } from "events";
-import mainLogger from "@utils/logger";
-import { Controller } from "@interfaces/controller";
-import { ActionContext, KeyAction } from "@elgato/streamdeck";
-import debounce from "debounce";
-import { vAtisStatusSettings } from "@actions/vAtisStatus";
-import {
-  isvAtisStatusController,
-  vAtisStatusController,
-} from "@controllers/vAtisStatus";
-import { handleAsyncException } from "@utils/handleAsyncException";
-import vAtisManager from "@managers/vatis";
 import { AtisLetterSettings } from "@actions/atisLetter";
+import { vAtisStatusSettings } from "@actions/vAtisStatus";
 import {
   AtisLetterController,
   isAtisLetterController,
 } from "@controllers/atisLetter";
+import {
+  isvAtisStatusController,
+  vAtisStatusController,
+} from "@controllers/vAtisStatus";
+import { ActionContext, KeyAction } from "@elgato/streamdeck";
+import { Controller } from "@interfaces/controller";
 import { Atis } from "@interfaces/messages";
+import vAtisManager from "@managers/vatis";
+import { handleAsyncException } from "@utils/handleAsyncException";
+import mainLogger from "@utils/logger";
+import debounce from "debounce";
+import { EventEmitter } from "events";
 
 const logger = mainLogger.child({ service: "action" });
 
@@ -138,7 +138,9 @@ class ActionManager extends EventEmitter {
       return;
     }
 
-    const requiresRefresh = savedAction.settings.callsign !== settings.callsign;
+    const requiresRefresh =
+      savedAction.settings.station !== settings.station ||
+      savedAction.settings.atisType !== settings.atisType;
 
     savedAction.settings = settings;
 
@@ -153,7 +155,11 @@ class ActionManager extends EventEmitter {
    */
   public updateAtisLetter(data: Atis) {
     this.getAtisLetterControllers()
-      .filter((action) => action.station === data.value.station)
+      .filter(
+        (action) =>
+          action.station === data.value.station &&
+          action.atisType === data.value.atisType
+      )
       .forEach((action) => {
         action.letter = data.value.atisLetter;
         action.isNewAtis = data.value.isNewAtis ?? false;
@@ -178,7 +184,10 @@ class ActionManager extends EventEmitter {
     // Send a clear request to vATIS
     vAtisManager.sendMessage({
       type: "acknowledgeAtisUpdate",
-      value: { station: savedAction.station },
+      value: {
+        station: savedAction.station,
+        atisType: savedAction.atisType,
+      },
     });
   }
 
@@ -196,7 +205,7 @@ class ActionManager extends EventEmitter {
     }
 
     savedAction.reset();
-    vAtisManager.refreshAtis(savedAction.station);
+    vAtisManager.refreshAtis(savedAction.station, savedAction.atisType);
 
     action.showOk().catch((error: unknown) => {
       handleAsyncException("Unable to show OK on ATIS button:", error);

@@ -4,7 +4,7 @@ import { Controller } from "@interfaces/controller";
 import TitleBuilder from "@root/utils/titleBuilder";
 import { stringOrUndefined } from "@root/utils/utils";
 import { BaseController } from "./baseController";
-import { NetworkConnectionStatus } from "@interfaces/messages";
+import { AtisType, NetworkConnectionStatus } from "@interfaces/messages";
 
 const StateColor = {
   CURRENT: "black",
@@ -133,6 +133,13 @@ export class AtisLetterController extends BaseController {
    */
   set unavailableImagePath(newValue: string | undefined) {
     this._unavailableImagePath = stringOrUndefined(newValue);
+  }
+
+  /**
+   * Returns the atisType setting, or Combined if undefined.
+   */
+  get atisType() {
+    return this.settings.atisType ?? AtisType.Combined;
   }
 
   /**
