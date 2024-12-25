@@ -6,12 +6,6 @@ import { stringOrUndefined } from "@root/utils/utils";
 import { BaseController } from "./baseController";
 import { AtisType, NetworkConnectionStatus } from "@interfaces/messages";
 
-const StateColor = {
-  CURRENT: "black",
-  UNAVAILABLE: "black",
-  UPDATED: "#f60",
-};
-
 const defaultTemplatePath = "images/actions/atisLetter/template.svg";
 const defaultUnavailableTemplatePath = "images/actions/atisLetter/template.svg";
 
@@ -51,6 +45,8 @@ export class AtisLetterController extends BaseController {
     this._letter = undefined;
     this._isNewAtis = false;
     this._connectionStatus = undefined;
+    this._altimeter = undefined;
+    this._wind = undefined;
 
     this.refreshTitle();
     this.refreshImage();
@@ -80,6 +76,7 @@ export class AtisLetterController extends BaseController {
     }
 
     this._connectionStatus = newValue;
+
     this.refreshImage();
   }
 
@@ -279,12 +276,12 @@ export class AtisLetterController extends BaseController {
       altimeter: this.altimeter,
       wind: this.wind,
       isConnected: this.isConnected,
+      isNewAtis: this.isNewAtis,
     };
 
     if (!this.isConnected) {
       this.setImage(this.unavailableImagePath, {
         ...replacements,
-        stateColor: StateColor.CURRENT,
         state: "current",
       });
       return;
@@ -293,7 +290,6 @@ export class AtisLetterController extends BaseController {
     if (this.isNewAtis) {
       this.setImage(this.updatedImagePath, {
         ...replacements,
-        stateColor: StateColor.UPDATED,
         state: "updated",
       });
       return;
@@ -301,7 +297,6 @@ export class AtisLetterController extends BaseController {
 
     this.setImage(this.currentImagePath, {
       ...replacements,
-      stateColor: StateColor.CURRENT,
       state: "current",
     });
   }

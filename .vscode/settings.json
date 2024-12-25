@@ -14,5 +14,6 @@
 		"node_modules": true,
 		"com.neil-enns.vatis.streamDeckPlugin": true,
 	},
-	"eslint.useFlatConfig": true
+	"eslint.useFlatConfig": true,
+	"git.enableSmartCommit": true
 }

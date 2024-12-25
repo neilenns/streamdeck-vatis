@@ -1,9 +1,20 @@
 <svg xmlns="http://www.w3.org/2000/svg" version="1.2" width="144" height="144">
-	<rect width="144" height="144" fill="{{stateColor}}" />
-	<text x="72" y="36" font-family="Verdana" font-weight="bold" font-size="22" text-anchor="middle"
-		fill="white">{{title}}</text>
-	<text x="72" y="92" fill="white" font-family="Verdana" font-weight="bold" font-size="50" text-anchor="middle">{{#if
-		letter}}{{letter}}{{else}}ATIS{{/if}}</text>
-	<text x="72" y="130" font-family="Verdana" font-weight="bold" font-size="22" text-anchor="middle"
-		fill="white">{{altimeter}}</text>
+	<defs>
+		<style>
+			.displayText {
+				fill: {{#if isConnected}}white{{else}}grey{{/if}};
+			}
+			.background {
+				fill: {{#if isNewAtis}}#f60{{else}}black{{/if}};
+			}
+		</style>
+	</defs>
+
+	<rect class="background" width="144" height="144"/>
+	<text class="displayText" x="72" y="36" font-family="Verdana" font-weight="bold" font-size="22"
+		text-anchor="middle">{{title}}</text>
+	<text class="displayText" x="72" y="92" font-family="Verdana" font-weight="bold" font-size="50"
+		text-anchor="middle">{{#if letter}}{{letter}}{{else}}ATIS{{/if}}</text>
+	<text class="displayText" x="72" y="130" font-family="Verdana" font-weight="bold" font-size="22"
+		text-anchor="middle">{{altimeter}}</text>
 </svg>
