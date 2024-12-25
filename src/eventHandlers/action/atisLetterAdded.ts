@@ -5,5 +5,5 @@ import vAtisManager from "@managers/vatis";
  * Handles when an ATIS letter is added.
  */
 export const handleAtisLetterAdded = (controller: AtisLetterController) => {
-  vAtisManager.refreshAtis(controller.station);
+  vAtisManager.refreshAtis(controller.station, controller.atisType);
 };

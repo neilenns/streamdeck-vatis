@@ -30,6 +30,7 @@ export interface GetAtis {
   type: "getAtis";
   value?: {
     station: string;
+    atisType: AtisType;
   };
 }
 
@@ -37,6 +38,7 @@ export interface AcknowledgeAtisUpdate {
   type: "acknowledgeAtisUpdate";
   value?: {
     station: string;
+    atisType: AtisType;
   };
 }
 
