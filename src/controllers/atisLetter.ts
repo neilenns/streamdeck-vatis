@@ -22,7 +22,7 @@ const defaultUnavailableTemplatePath = "images/actions/atisLetter/template.svg";
 export class AtisLetterController extends BaseController {
   type = "AtisLetterController";
 
-  private _connectionStatus: NetworkConnectionStatus | null = null;
+  private _connectionStatus: NetworkConnectionStatus | undefined = undefined;
   private _isNewAtis = false;
   private _letter?: string;
   private _wind?: string;
@@ -50,7 +50,7 @@ export class AtisLetterController extends BaseController {
   public reset() {
     this._letter = undefined;
     this._isNewAtis = false;
-    this._connectionStatus = null;
+    this._connectionStatus = undefined;
 
     this.refreshTitle();
     this.refreshImage();
@@ -74,7 +74,7 @@ export class AtisLetterController extends BaseController {
   /*
    * Sets the connectionStatus and updates the action state.
    */
-  set connectionStatus(newValue: NetworkConnectionStatus | null) {
+  set connectionStatus(newValue: NetworkConnectionStatus | undefined) {
     if (this._connectionStatus === newValue) {
       return;
     }

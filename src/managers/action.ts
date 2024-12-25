@@ -155,6 +155,7 @@ class ActionManager extends EventEmitter {
     this.getAtisLetterControllers()
       .filter((action) => action.station === data.value.station)
       .forEach((action) => {
+        action.connectionStatus = data.value.networkConnectionStatus;
         action.letter = data.value.atisLetter;
         action.isNewAtis = data.value.isNewAtis ?? false;
         action.wind = data.value.wind;
