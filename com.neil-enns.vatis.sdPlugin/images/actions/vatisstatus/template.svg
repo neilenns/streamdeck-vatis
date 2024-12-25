@@ -4,11 +4,11 @@
 	<defs>
 		<style>
 			.sunFill {
-				fill: {{sunStateColor}};
+				fill: {{#if isConnected}}#febd01{{else}}black{{/if}};
 			}
 
 			.sunOutline {
-				fill: #e96518;
+				fill: {{#if isConnected}}#e96518{{else}}#c9cac9{{/if}};
 			}
 
 			.cloudOutline {
@@ -16,7 +16,7 @@
 			}
 
 			.cloudFill {
-				fill: {{cloudStateColor}};
+				fill: {{#if isConnected}}#ebecec{{else}}black{{/if}};
 			}
 		</style>
 	</defs>
