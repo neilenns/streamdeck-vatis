@@ -1,10 +1,10 @@
 import { AtisLetterSettings } from "@actions/atisLetter";
 import { KeyAction } from "@elgato/streamdeck";
 import { Controller } from "@interfaces/controller";
+import { AtisType, NetworkConnectionStatus } from "@interfaces/messages";
 import TitleBuilder from "@root/utils/titleBuilder";
 import { stringOrUndefined } from "@root/utils/utils";
 import { BaseController } from "./baseController";
-import { AtisType, NetworkConnectionStatus } from "@interfaces/messages";
 
 const defaultTemplatePath = "images/actions/atisLetter/template.svg";
 const defaultUnavailableTemplatePath = "images/actions/atisLetter/template.svg";
@@ -270,35 +270,26 @@ export class AtisLetterController extends BaseController {
    */
   public refreshImage() {
     const replacements = {
-      station: this.station,
-      letter: this.letter,
-      title: this.title,
       altimeter: this.altimeter,
-      wind: this.wind,
       isConnected: this.isConnected,
       isNewAtis: this.isNewAtis,
+      letter: this.letter,
+      station: this.station,
+      title: this.title,
+      wind: this.wind,
     };
 
     if (!this.isConnected) {
-      this.setImage(this.unavailableImagePath, {
-        ...replacements,
-        state: "current",
-      });
+      this.setImage(this.unavailableImagePath, replacements);
       return;
     }
 
     if (this.isNewAtis) {
-      this.setImage(this.updatedImagePath, {
-        ...replacements,
-        state: "updated",
-      });
+      this.setImage(this.updatedImagePath, replacements);
       return;
     }
 
-    this.setImage(this.currentImagePath, {
-      ...replacements,
-      state: "current",
-    });
+    this.setImage(this.currentImagePath, replacements);
   }
 
   /**

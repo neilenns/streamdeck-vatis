@@ -1,19 +1,9 @@
-import { Controller } from "@interfaces/controller";
-import { BaseController } from "./baseController";
 import { vAtisStatusSettings } from "@actions/vAtisStatus";
 import { KeyAction } from "@elgato/streamdeck";
-import { stringOrUndefined } from "@utils/utils";
+import { Controller } from "@interfaces/controller";
 import TitleBuilder from "@utils/titleBuilder";
-
-const SunStateColor = {
-  NOT_CONNECTED: "black",
-  CONNECTED: "#febd01",
-};
-
-const CloudStateColor = {
-  NOT_CONNECTED: "black",
-  CONNECTED: "#ebecec",
-};
+import { stringOrUndefined } from "@utils/utils";
+import { BaseController } from "./baseController";
 
 const defaultTemplatePath = "images/actions/vAtisStatus/template.svg";
 
@@ -147,24 +137,16 @@ export class vAtisStatusController extends BaseController {
    */
   public refreshImage() {
     const replacements = {
+      isConnected: this.isConnected,
       title: this.title,
     };
 
     if (this.isConnected) {
-      this.setImage(this.connectedImagePath, {
-        ...replacements,
-        sunStateColor: SunStateColor.CONNECTED,
-        cloudStateColor: CloudStateColor.CONNECTED,
-        state: "connected",
-      });
+      this.setImage(this.connectedImagePath, replacements);
       return;
     }
 
-    this.setImage(this.notConnectedImagePath, {
-      sunStateColor: SunStateColor.NOT_CONNECTED,
-      cloudStateColor: CloudStateColor.NOT_CONNECTED,
-      state: "notConnected",
-    });
+    this.setImage(this.notConnectedImagePath, replacements);
   }
 }
 
