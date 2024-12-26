@@ -8,11 +8,11 @@
 			}
 
 			.sunOutline {
-				fill: {{#if isConnected}}#e96518{{else}}#c9cac9{{/if}};
+				fill: {{#if isConnected}}#e96518{{else}}grey{{/if}};
 			}
 
 			.cloudOutline {
-				fill: #c9cac9;
+				fill: {{#if isConnected}}#c9cac9{{else}}grey{{/if}};
 			}
 
 			.cloudFill {
