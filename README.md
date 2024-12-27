@@ -26,8 +26,8 @@ After installation the plugin actions are available under the vATIS category:
 The ATIS letter action displays the station name, current AITS letter, and current altimeter
 for a single station in vATIS.
 
-Pressing the action will clear the new ATIS indicator in vATIS and on the action. A long
-press of the action will refresh the action's state.
+Pressing the action clears the new ATIS indicator in vATIS and on the action. A long
+press of the action clears the new ATIS indicator on all stations in vATIS.
 
 For example, if you have published a combined ATIS at KLMT in vATIS you can configure an action
 like this to display the information on your Stream Deck:
