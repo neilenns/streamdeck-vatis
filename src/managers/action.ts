@@ -271,15 +271,11 @@ class ActionManager extends EventEmitter {
 
   /**
    * Called when a vAtis status action keydown event is triggered.
-   * Forces a refresh of the vAtis status.
-   * @param action The action
+   * Clears the new ATIS state on all ATIS stations.
+   * @param _ The action
    */
-  public vAtisStatusLongPress(action: KeyAction) {
-    this.resetAll();
-
-    action.showOk().catch((error: unknown) => {
-      handleAsyncException("Unable to show OK status on vATIS action: ", error);
-    });
+  public vAtisStatusLongPress(_: KeyAction) {
+    vAtisManager.sendMessage({ type: "acknowledgeAtisUpdate" });
   }
 }
 
