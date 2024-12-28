@@ -5,7 +5,7 @@
 				fill: {{#if isConnected}}white{{else}}grey{{/if}};
 			}
 			.background {
-				fill: {{#if isNewAtis}}#f60{{else}}black{{/if}};
+				fill: {{#if isNewAtis}}#e96518{{else}}black{{/if}};
 			}
 		</style>
 	</defs>
