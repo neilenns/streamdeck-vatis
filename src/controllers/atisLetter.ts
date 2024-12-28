@@ -1,7 +1,11 @@
 import { AtisLetterSettings } from "@actions/atisLetter";
 import { KeyAction } from "@elgato/streamdeck";
 import { Controller } from "@interfaces/controller";
-import { AtisType, NetworkConnectionStatus } from "@interfaces/messages";
+import {
+  AtisType,
+  NetworkConnectionStatus,
+  PressureUnit,
+} from "@interfaces/messages";
 import TitleBuilder from "@root/utils/titleBuilder";
 import { stringOrUndefined } from "@root/utils/utils";
 import { BaseController } from "./baseController";
@@ -21,6 +25,10 @@ export class AtisLetterController extends BaseController {
   private _letter?: string;
   private _wind?: string;
   private _altimeter?: string;
+  private _pressureUnit?: PressureUnit;
+  private _pressureValue?: number;
+
+  private _suppressUpdates: boolean;
   private _settings: AtisLetterSettings | null = null;
 
   private _currentImagePath?: string;
@@ -36,6 +44,7 @@ export class AtisLetterController extends BaseController {
   constructor(action: KeyAction, settings: AtisLetterSettings) {
     super(action);
     this.settings = settings;
+    this._suppressUpdates = false;
   }
 
   /**
@@ -47,6 +56,9 @@ export class AtisLetterController extends BaseController {
     this._connectionStatus = undefined;
     this._altimeter = undefined;
     this._wind = undefined;
+    this._pressureUnit = undefined;
+    this._pressureValue = undefined;
+    this._suppressUpdates = false;
 
     this.refreshTitle();
     this.refreshImage();
@@ -253,8 +265,43 @@ export class AtisLetterController extends BaseController {
    */
   set altimeter(newAltimeter: string | undefined) {
     this._altimeter = newAltimeter;
+
     this.refreshTitle();
-    this.refreshImage(); // For cases where the state is fully responsible for displaying the content
+    this.refreshImage();
+  }
+
+  /**
+   * Gets the current pressure unit.
+   */
+  get pressureUnit(): PressureUnit | undefined {
+    return this._pressureUnit;
+  }
+
+  /**
+   * Sets the current pressure unit
+   */
+  set pressureUnit(newPressureUnit: PressureUnit | undefined) {
+    this._pressureUnit = newPressureUnit;
+
+    this.refreshTitle();
+    this.refreshImage();
+  }
+
+  /**
+   * Gets the current pressure value
+   */
+  get pressureValue(): number | undefined {
+    return this._pressureValue;
+  }
+
+  /**
+   * Sets the current pressure value
+   */
+  set pressureValue(newPressureValue: number | undefined) {
+    this._pressureValue = newPressureValue;
+
+    this.refreshTitle();
+    this.refreshImage();
   }
 
   /**
@@ -264,11 +311,32 @@ export class AtisLetterController extends BaseController {
     return this.settings.title;
   }
   //#endregion
+  /**
+   * Disables automatic refreshing of the title and background image when
+   * properties are updated. Useful when multiple properties will be updated
+   * in quick succession to avoid unnecessary re-renders.
+   */
+  public suppressUpdates() {
+    this._suppressUpdates = true;
+  }
 
   /**
-   * Sets the image based on the state of the action.
+   * Enables automatic refreshing of the title and backgruond image when
+   * properties are updated.
+   */
+  public enableUpdates() {
+    this._suppressUpdates = false;
+  }
+
+  /**
+   * Sets the image based on the state of the action. If suppressUpdates is true
+   * nothing will happen.
    */
   public refreshImage() {
+    if (this._suppressUpdates) {
+      return;
+    }
+
     const replacements = {
       altimeter: this.altimeter,
       isConnected: this.isConnected,
@@ -293,9 +361,14 @@ export class AtisLetterController extends BaseController {
   }
 
   /**
-   * Sets the title on the action.
+   * Sets the title on the action. If suppressUpdates is true nothing
+   * will happen.
    */
   public refreshTitle() {
+    if (this._suppressUpdates) {
+      return;
+    }
+
     const title = new TitleBuilder();
 
     title.push(this.title, this.showTitle);

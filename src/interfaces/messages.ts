@@ -11,6 +11,20 @@ export enum AtisType {
   Arrival = "Arrival",
 }
 
+export enum PressureUnit {
+  Degree = "deg",
+  DegreeCelcius = "deg C",
+  Feet = "ft",
+  HectoPascal = "hPa",
+  KilometerPerHour = "km/h",
+  Knot = "kt",
+  MercuryInch = "MercuryInch",
+  Meter = "m",
+  MeterPerSecond = "m/s",
+  StatueMile = "SM",
+  UnknownUnit = "N/A",
+}
+
 export interface Atis {
   type: "atis";
   value: {
@@ -23,6 +37,8 @@ export interface Atis {
     altimeter?: string;
     isNewAtis?: boolean;
     atisLetter?: string;
+    pressureValue?: number;
+    pressureUnit?: PressureUnit;
   };
 }
 
