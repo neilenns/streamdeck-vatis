@@ -29,6 +29,10 @@ for a single station in vATIS.
 Pressing the action clears the new ATIS indicator in vATIS and on the action. A long
 press of the action clears the new ATIS indicator on all stations in vATIS.
 
+By default the altimeter value displays in white. For altimeters reported in inches of mercury,
+if the value falls below 29.92 the value will show in red as a reminder that FL180 (or FL190,
+depending on the altimeter value) are be unusable.
+
 For example, if you have published a combined ATIS at KLMT in vATIS you can configure an action
 like this to display the information on your Stream Deck:
 
