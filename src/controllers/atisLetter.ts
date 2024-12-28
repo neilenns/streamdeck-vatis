@@ -342,8 +342,10 @@ export class AtisLetterController extends BaseController {
       isConnected: this.isConnected,
       isNewAtis: this.isNewAtis,
       letter: this.letter,
-      pressureUnit: this.pressureUnit,
-      pressureValue: this.pressureValue,
+      pressure: {
+        unit: this.pressureUnit,
+        value: this.pressureValue,
+      },
       station: this.station,
       title: this.title,
       wind: this.wind,
