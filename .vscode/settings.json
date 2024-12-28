@@ -15,5 +15,8 @@
 		"com.neil-enns.vatis.streamDeckPlugin": true,
 	},
 	"eslint.useFlatConfig": true,
-	"git.enableSmartCommit": true
+	"git.enableSmartCommit": true,
+	"[svg]": {
+    "editor.formatOnSave": false
+}
 }

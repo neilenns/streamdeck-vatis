@@ -4,6 +4,17 @@
 			.displayText {
 				fill: {{#if isConnected}}white{{else}}grey{{/if}};
 			}
+			.altimeterText {
+				{{#if (eq pressureUnit "MercuryInch")}}
+					{{#if (lte pressureValue 2991 )}}
+						fill: {{#if isConnected}}red{{else}}grey{{/if}};
+					{{else}}
+						fill: {{#if isConnected}}white{{else}}grey{{/if}};
+					{{/if}}
+				{{else}}
+					fill: {{#if isConnected}}white{{else}}grey{{/if}};
+				{{/if}}
+			}
 			.background {
 				fill: {{#if isNewAtis}}#e96518{{else}}black{{/if}};
 			}
@@ -15,6 +26,6 @@
 		text-anchor="middle">{{title}}</text>
 	<text class="displayText" x="72" y="92" font-family="Verdana" font-weight="bold" font-size="50"
 		text-anchor="middle">{{#if letter}}{{letter}}{{else}}ATIS{{/if}}</text>
-	<text class="displayText" x="72" y="130" font-family="Verdana" font-weight="bold" font-size="22"
+	<text class="altimeterText" x="72" y="130" font-family="Verdana" font-weight="bold" font-size="22"
 		text-anchor="middle">{{altimeter}}</text>
 </svg>
