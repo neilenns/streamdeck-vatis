@@ -338,13 +338,13 @@ export class AtisLetterController extends BaseController {
     }
 
     const replacements = {
-      altimeter: this.altimeter,
       isConnected: this.isConnected,
       isNewAtis: this.isNewAtis,
       letter: this.letter,
       pressure: {
         unit: this.pressureUnit,
         value: this.pressureValue,
+        formattedValue: this.altimeter,
       },
       station: this.station,
       title: this.title,
