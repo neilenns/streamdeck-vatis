@@ -27,5 +27,5 @@
 	<text class="displayText" x="72" y="92" font-family="Verdana" font-weight="bold" font-size="50"
 		text-anchor="middle">{{#if letter}}{{letter}}{{else}}ATIS{{/if}}</text>
 	<text class="altimeterText" x="72" y="130" font-family="Verdana" font-weight="bold" font-size="22"
-		text-anchor="middle">{{altimeter}}</text>
+		text-anchor="middle">{{pressure.formattedValue}}</text>
 </svg>
