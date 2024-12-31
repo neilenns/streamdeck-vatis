@@ -5,7 +5,7 @@
 				fill: {{#if isConnected}}white{{else}}grey{{/if}};
 			}
 			.altimeterText {
-				{{#if (eq pressure.unit "MercuryInch")}}
+				{{#if (eq pressure.unit "MercuryInch")}}xxx
 					{{#if (lte pressure.value 2991 )}}
 						fill: {{#if isConnected}}red{{else}}grey{{/if}};
 					{{else}}
