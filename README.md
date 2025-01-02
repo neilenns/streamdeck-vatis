@@ -64,7 +64,7 @@ custom images the following advanced settings can be used to display text on the
 The vATIS status action shows the status of the connection between Stream Deck and vATIS.
 A long press of the action will force a refresh of all the Stream Deck vATIS actions.
 
-## TrackAudio status action settings <!-- omit from toc -->
+## vATIS status action settings <!-- omit from toc -->
 
 | Setting       | Description                                                 | Default                                                                                 |
 | ------------- | ----------------------------------------------------------- | --------------------------------------------------------------------------------------- |
@@ -77,4 +77,4 @@ A long press of the action will force a refresh of all the Stream Deck vATIS act
 
 All image properties support SVG templates using [Handlebars](https://handlebarsjs.com/). This enables using a single SVG image across multiple
 actions that respond to state changes. For more information on the available template variables see the
-[documentation on the wiki](https://github.com/neilenns/streamdeck-trackaudio/wiki/SVG-templates).
+[documentation on the wiki](https://github.com/neilenns/streamdeck-vatis/wiki/SVG-templates).
