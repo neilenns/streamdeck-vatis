@@ -1,7 +1,7 @@
 # vATIS actions for Stream Deck <!-- omit from toc -->
 
 > [!IMPORTANT]
-> This plugin requires an unreleased version of vATIS. It won't be useful to you yet.
+> This plugin requires [vATIS v4.1.0-beta.4](https://vatis.app/) or later.
 
 ![Example profile showing ATIS letter actions for KHIO, KPDX, and KUAO. KPDX has an orange background indicating a new ATIS letter. All three show the station name above the letter and the current altimeter below the letter.](docs/images/example.png)
 
