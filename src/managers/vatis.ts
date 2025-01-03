@@ -9,7 +9,7 @@ class VatisManager extends EventEmitter {
   private static instance: VatisManager | null = null;
   private socket: WebSocket | null = null;
   private reconnectInterval = 1000 * 5; // 5 seconds
-  private url = "ws://localhost:49082/";
+  private url = "ws://127.0.0.1:49082/";
   private reconnectTimer: NodeJS.Timeout | null = null;
 
   private constructor() {
