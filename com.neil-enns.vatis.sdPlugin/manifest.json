@@ -42,7 +42,7 @@
   "Description": "Provides actions for displaying current ATIS information from vATIS.",
   "Icon": "images/plugin/pluginIcon",
   "SDKVersion": 2,
-  "URL": "https://github.com/neilenns/streamdeck-vatis",
+  "URL": "https://projects.neilenns.com/docs/streamdeck-vatis/",
   "Software": {
     "MinimumVersion": "6.4"
   },
