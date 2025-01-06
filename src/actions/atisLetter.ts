@@ -66,7 +66,7 @@ export class AtisLetter extends SingletonAction<AtisLetterSettings> {
     const pressLength = Date.now() - this._keyDownStart;
 
     if (pressLength > LONG_PRESS_THRESHOLD) {
-      handleAtisLetterLongPress(ev.action);
+      handleAtisLetterLongPress();
     } else {
       handleAtisLetterShortPress(ev.action);
     }

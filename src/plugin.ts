@@ -4,14 +4,14 @@ import mainLogger from "@utils/logger";
 import vAtisManager from "@managers/vatis";
 import actionManager from "@managers/action";
 
-import { handleConnected } from "@eventHandlers/vAtis/connected";
-import { handleDisconnected } from "@eventHandlers/vAtis/disconnected";
-import { handleActionAdded } from "@eventHandlers/action/actionAdded";
-import { handleActionRemoved } from "@eventHandlers/action/actionRemoved";
+import { handleConnected } from "@events/vAtis/connected";
+import { handleDisconnected } from "@events/vAtis/disconnected";
+import { handleActionAdded } from "@events/action/actionAdded";
+import { handleActionRemoved } from "@events/action/actionRemoved";
 import { AtisLetter } from "@actions/atisLetter";
-import { handleAtisLetterAdded } from "@eventHandlers/action/atisLetterAdded";
-import { handleAtisLetterUpdated } from "@eventHandlers/action/atisLetterUpdated";
-import { handleAtisUpdate } from "@eventHandlers/vAtis/atisUpdate";
+import { handleAtisLetterAdded } from "@events/action/atisLetterAdded";
+import { handleAtisLetterUpdated } from "@events/action/atisLetterUpdated";
+import { handleAtisUpdate } from "@events/vAtis/atisUpdate";
 
 const logger = mainLogger.child({ service: "plugin" });
 
