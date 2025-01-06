@@ -23,6 +23,7 @@
     "Addv",
     "Atis",
     "atisletter",
+    "callsign",
     "elgato",
     "getv",
     "handlev",
@@ -30,6 +31,7 @@
     "Typeguard",
     "Updatev",
     "vatis",
-    "vatisstatus"
+    "vatisstatus",
+    "Verdana"
   ]
 }
