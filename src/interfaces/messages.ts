@@ -46,7 +46,7 @@ export interface GetAtis {
   type: "getAtis";
   value?: {
     station: string;
-    atisType: AtisType;
+    atisType?: AtisType;
   };
 }
 

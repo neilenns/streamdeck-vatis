@@ -146,10 +146,17 @@ class VatisManager extends EventEmitter {
 
   /**
    * Sends a message to vATIS to get the ATIS for a specific station.
+   * If the station is omitted refreshes all stations regardless of type.
    * @param station Station to refresh
+   * @param atisType Station type to refresh
    */
   public refreshAtis(station?: string, atisType?: AtisType) {
-    if (!station || !atisType || !this.isConnected) {
+    if (!this.isConnected) {
+      return;
+    }
+
+    if (!station) {
+      this.sendMessage({ type: "getAtis" });
       return;
     }
 

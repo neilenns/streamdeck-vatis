@@ -26,8 +26,7 @@ After installation the plugin actions are available under the vATIS category:
 The ATIS letter action displays the station name, current AITS letter, and current altimeter
 for a single station in vATIS.
 
-Pressing the action clears the new ATIS indicator in vATIS and on the action. A long
-press of the action clears the new ATIS indicator on all stations in vATIS.
+Pressing the action clears the new ATIS indicator in vATIS and on the action. A long press of the action clears the new ATIS indicator on all stations in vATIS.
 
 By default the pressure displays in white. For pressure reported in inches of mercury,
 if the value falls below 29.92 the value will show in red as a reminder that FL180 (or FL190,
@@ -46,7 +45,7 @@ like this to display the information on your Stream Deck:
 | Station     | The name of the station you want to display status for. Required.         |                                                                                                                                                      |
 | Type        | The type of the station.                                                  | Combined                                                                                                                                             |
 | Current     | The image to display when the ATIS letter shown is current. Optional.     | ![Black background, white text](docs/images/atis-connected.png) ![Black background, white text, red text for pressure](docs/images/atis-warning.png) |
-| Unavailable | The iamge to display when there is no connection to vATIS. Optional.      | ![Black background, "ATIS" for letter, grey text](docs/images/atis-notconnected.png)                                                                 |
+| Unavailable | The image to display when there is no connection to vATIS. Optional.      | ![Black background, "ATIS" for letter, grey text](docs/images/atis-notconnected.png)                                                                 |
 | Updated     | The image to display when the ATIS letter updated to a new one. Optional. | ![Orange background, white text](docs/images/atis-updated.png)                                                                                       |
 
 The default display automatically includes the station name, ATIS letter, and altimeter. When specifying

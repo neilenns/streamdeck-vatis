@@ -1,5 +1,3 @@
-import { AtisLetterSettings } from "@actions/atisLetter";
-import { vAtisStatusSettings } from "@actions/vAtisStatus";
 import {
   AtisLetterController,
   isAtisLetterController,
@@ -8,13 +6,11 @@ import {
   isvAtisStatusController,
   vAtisStatusController,
 } from "@controllers/vAtisStatus";
-import { ActionContext, KeyAction } from "@elgato/streamdeck";
+import { ActionContext } from "@elgato/streamdeck";
 import { Controller } from "@interfaces/controller";
 import { Atis } from "@interfaces/messages";
 import vAtisManager from "@managers/vatis";
-import { handleAsyncException } from "@utils/handleAsyncException";
 import mainLogger from "@utils/logger";
-import debounce from "debounce";
 import { EventEmitter } from "events";
 
 const logger = mainLogger.child({ service: "action" });
@@ -25,13 +21,6 @@ class ActionManager extends EventEmitter {
 
   private constructor() {
     super();
-
-    // Debounce the update methods to avoid rapid pinging of vATIS or
-    // title redraws while typing
-    this.updateAtisLetterSettings = debounce(
-      this.updateAtisLetterSettings.bind(this),
-      500
-    );
   }
 
   /**
@@ -54,6 +43,15 @@ class ActionManager extends EventEmitter {
   }
 
   /**
+   * Adds a controller to the list of tracked actions.
+   * @param controller The controller to add
+   */
+  public add(controller: Controller): void {
+    this.actions.push(controller);
+    this.emit("actionAdded", controller);
+  }
+
+  /**
    * Removes an action from the list.
    * @param action The action to remove
    */
@@ -66,36 +64,6 @@ class ActionManager extends EventEmitter {
   }
 
   /**
-   * Adds a vATIS status action to the action list. Emits a vAtisStatusAdded event
-   * after the action is added.
-   * @param action The action to add
-   */
-  public addvAtis(action: KeyAction, settings: vAtisStatusSettings) {
-    const controller = new vAtisStatusController(action, settings);
-
-    this.actions.push(controller);
-    this.emit("vAtisStatusAdded", controller);
-    this.emit("actionAdded", controller);
-  }
-
-  /**
-   * Updates the settings associated with a vATIS status action.
-   * @param action The action to update
-   * @param settings The new settings to use
-   */
-  public updatevAtisStatus(action: KeyAction, settings: vAtisStatusSettings) {
-    const savedAction = this.getvAtisStatusControllers().find(
-      (entry) => entry.action.id === action.id
-    );
-
-    if (!savedAction) {
-      return;
-    }
-
-    savedAction.settings = settings;
-  }
-
-  /**
    * Updates the connection state on all vATIS status buttons to the current connected states
    * and updates the background image to the appropriate state image.
    */
@@ -103,50 +71,6 @@ class ActionManager extends EventEmitter {
     this.getvAtisStatusControllers().forEach((entry) => {
       entry.isConnected = vAtisManager.isConnected;
     });
-  }
-
-  /**
-   * Adds an atis letter action to the action list. Emits an atisLetterAdded
-   * event after the action is added.
-   * @param action The action
-   * @param settings The settings for the action
-   */
-  public addAtisLetter(action: KeyAction, settings: AtisLetterSettings): void {
-    const controller = new AtisLetterController(action, settings);
-
-    this.actions.push(controller);
-    this.emit("atisLetterAdded", controller);
-    this.emit("actionAdded", controller);
-  }
-
-  /**
-   * Updates the settings associated with an ATIS letter status action.
-   * Emits a atisLetterUpdated event if the settings require
-   * the action to refresh.
-   * @param action The action to update
-   * @param settings The new settings to use
-   */
-  public updateAtisLetterSettings(
-    action: KeyAction,
-    settings: AtisLetterSettings
-  ) {
-    const savedAction = this.getAtisLetterControllers().find(
-      (entry) => entry.action.id === action.id
-    );
-
-    if (!savedAction) {
-      return;
-    }
-
-    const requiresRefresh =
-      savedAction.settings.station !== settings.station ||
-      savedAction.settings.atisType !== settings.atisType;
-
-    savedAction.settings = settings;
-
-    if (requiresRefresh) {
-      this.emit("atisLetterUpdated", savedAction);
-    }
   }
 
   /**
@@ -171,50 +95,6 @@ class ActionManager extends EventEmitter {
 
         action.refreshDisplay();
       });
-  }
-
-  /**
-   * Called when an ATIS letter action has a short press. Clears the state.
-   * @param actionId The ID of the action that had the short press
-   */
-  public atisLetterShortPress(action: KeyAction) {
-    const savedAction = this.getAtisLetterControllers().find(
-      (entry) => entry.action.id === action.id
-    );
-
-    if (!savedAction?.station) {
-      return;
-    }
-
-    // Send a clear request to vATIS
-    vAtisManager.sendMessage({
-      type: "acknowledgeAtisUpdate",
-      value: {
-        station: savedAction.station,
-        atisType: savedAction.atisType,
-      },
-    });
-  }
-
-  /**
-   * Called when an ATIS letter action has a long press. Refreshses the ATIS.
-   * @param actionId The ID of the action that had the long press
-   */
-  public atisLetterLongPress(action: KeyAction) {
-    const savedAction = this.getAtisLetterControllers().find(
-      (entry) => entry.action.id === action.id
-    );
-
-    if (!savedAction) {
-      return;
-    }
-
-    savedAction.reset();
-    vAtisManager.refreshAtis(savedAction.station, savedAction.atisType);
-
-    action.showOk().catch((error: unknown) => {
-      handleAsyncException("Unable to show OK on ATIS button:", error);
-    });
   }
 
   /**
@@ -271,15 +151,6 @@ class ActionManager extends EventEmitter {
     this.actions.forEach((entry) => {
       entry.reset();
     });
-  }
-
-  /**
-   * Called when a vAtis status action keydown event is triggered.
-   * Clears the new ATIS state on all ATIS stations.
-   * @param _ The action
-   */
-  public vAtisStatusLongPress(_: KeyAction) {
-    vAtisManager.sendMessage({ type: "acknowledgeAtisUpdate" });
   }
 }
 
