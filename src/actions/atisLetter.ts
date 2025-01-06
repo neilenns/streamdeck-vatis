@@ -7,8 +7,12 @@ import {
   WillAppearEvent,
   WillDisappearEvent,
 } from "@elgato/streamdeck";
+import { handleAddAtisLetter } from "@events/streamdeck/atisLetter/addAtisLetter";
+import { handleAtisLetterLongPress } from "@events/streamdeck/atisLetter/atisLetterLongPress";
+import { handleAtisLetterShortPress } from "@events/streamdeck/atisLetter/atisLetterShortPress";
+import { handleUpdateAtisLetterSettings } from "@events/streamdeck/atisLetter/updateAtisLetterSettings";
+import { handleRemove } from "@events/streamdeck/remove";
 import { AtisType } from "@interfaces/messages";
-import actionManager from "@managers/action";
 import { LONG_PRESS_THRESHOLD } from "@utils/constants";
 
 @action({ UUID: "com.neil-enns.vatis.atisletter" })
@@ -30,14 +34,14 @@ export class AtisLetter extends SingletonAction<AtisLetterSettings> {
       return;
     }
 
-    actionManager.addAtisLetter(ev.action, ev.payload.settings);
+    handleAddAtisLetter(ev.action, ev.payload.settings);
   }
 
   // When the action is removed from a profile it also gets removed from the ActionManager.
   override onWillDisappear(
     ev: WillDisappearEvent<AtisLetterSettings>
   ): void | Promise<void> {
-    actionManager.remove(ev.action);
+    handleRemove(ev.action);
   }
 
   // When settings are received the ActionManager is called to update the existing
@@ -51,7 +55,7 @@ export class AtisLetter extends SingletonAction<AtisLetterSettings> {
       return;
     }
 
-    actionManager.updateAtisLetterSettings(ev.action, ev.payload.settings);
+    handleUpdateAtisLetterSettings(ev.action, ev.payload.settings);
   }
 
   override onKeyDown(): Promise<void> | void {
@@ -62,9 +66,9 @@ export class AtisLetter extends SingletonAction<AtisLetterSettings> {
     const pressLength = Date.now() - this._keyDownStart;
 
     if (pressLength > LONG_PRESS_THRESHOLD) {
-      actionManager.atisLetterLongPress(ev.action);
+      handleAtisLetterLongPress();
     } else {
-      actionManager.atisLetterShortPress(ev.action);
+      handleAtisLetterShortPress(ev.action);
     }
   }
 }

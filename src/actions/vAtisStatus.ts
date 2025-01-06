@@ -7,7 +7,10 @@ import {
   WillAppearEvent,
   WillDisappearEvent,
 } from "@elgato/streamdeck";
-import actionManager from "@managers/action";
+import { handleRemove } from "@events/streamdeck/remove";
+import { handleAddvAtisStatus } from "@events/streamdeck/vAtisStatus/addvAtisStatus";
+import { handleUpdatevAtisStatusSettings } from "@events/streamdeck/vAtisStatus/updatevAtisStatusSettings";
+import { handlevAtisStatusLongPress } from "@events/streamdeck/vAtisStatus/vatisStatusLongPress";
 import { LONG_PRESS_THRESHOLD } from "@utils/constants";
 
 @action({ UUID: "com.neil-enns.vatis.vatisstatus" })
@@ -28,14 +31,14 @@ export class vAtisAudioStatus extends SingletonAction<vAtisStatusSettings> {
       return;
     }
 
-    actionManager.addvAtis(ev.action, ev.payload.settings);
+    handleAddvAtisStatus(ev.action, ev.payload.settings);
   }
 
   // When the action is removed from a profile it also gets removed from the ActionManager.
   override onWillDisappear(
     ev: WillDisappearEvent<vAtisStatusSettings>
   ): void | Promise<void> {
-    actionManager.remove(ev.action);
+    handleRemove(ev.action);
   }
 
   override onDidReceiveSettings(
@@ -47,7 +50,7 @@ export class vAtisAudioStatus extends SingletonAction<vAtisStatusSettings> {
       return;
     }
 
-    actionManager.updatevAtisStatus(ev.action, ev.payload.settings);
+    handleUpdatevAtisStatusSettings(ev.action, ev.payload.settings);
   }
 
   override onKeyDown(): Promise<void> | void {
@@ -58,7 +61,7 @@ export class vAtisAudioStatus extends SingletonAction<vAtisStatusSettings> {
     const pressLength = Date.now() - this._keyDownStart;
 
     if (pressLength > LONG_PRESS_THRESHOLD) {
-      actionManager.vAtisStatusLongPress(ev.action);
+      handlevAtisStatusLongPress(ev.action);
     }
   }
 }

@@ -1,22 +1,35 @@
 {
-	/* Prefer tabs over spaces for accessibility */
-	"editor.insertSpaces": false,
-	"editor.detectIndentation": false,
-	/* Explorer */
-	"explorer.fileNesting.enabled": true,
-	"explorer.fileNesting.patterns": {
-		"*.js": "${capture}.js.map, ${capture}.min.js, ${capture}.d.ts",
-		"package.json": "package-lock.json, yarn.lock, pnpm-lock.yaml, rollup.config.mjs, tsconfig.json",
-		"eslint.config.js": ".markdownlint.jsonc",
-		"README.md": "DEVELOPMENT.md"
-	},
-	"files.exclude": {
-		"node_modules": true,
-		"com.neil-enns.vatis.streamDeckPlugin": true,
-	},
-	"eslint.useFlatConfig": true,
-	"git.enableSmartCommit": true,
-	"[svg]": {
+  /* Prefer tabs over spaces for accessibility */
+  "editor.insertSpaces": false,
+  "editor.detectIndentation": false,
+  /* Explorer */
+  "explorer.fileNesting.enabled": true,
+  "explorer.fileNesting.patterns": {
+    "*.js": "${capture}.js.map, ${capture}.min.js, ${capture}.d.ts",
+    "package.json": "package-lock.json, yarn.lock, pnpm-lock.yaml, rollup.config.mjs, tsconfig.json",
+    "eslint.config.js": ".markdownlint.jsonc",
+    "README.md": "DEVELOPMENT.md"
+  },
+  "files.exclude": {
+    "node_modules": true,
+    "com.neil-enns.vatis.streamDeckPlugin": true
+  },
+  "eslint.useFlatConfig": true,
+  "git.enableSmartCommit": true,
+  "[svg]": {
     "editor.formatOnSave": false
-}
+  },
+  "cSpell.words": [
+    "Addv",
+    "Atis",
+    "atisletter",
+    "elgato",
+    "getv",
+    "handlev",
+    "streamdeck",
+    "Typeguard",
+    "Updatev",
+    "vatis",
+    "vatisstatus"
+  ]
 }
