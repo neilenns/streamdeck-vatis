@@ -9,6 +9,7 @@ import {
 import TitleBuilder from "@root/utils/titleBuilder";
 import { stringOrUndefined } from "@root/utils/utils";
 import { BaseController } from "./baseController";
+import debounce from "debounce";
 
 const defaultTemplatePath = "images/actions/atisLetter/template.svg";
 const defaultUnavailableTemplatePath = "images/actions/atisLetter/template.svg";
@@ -48,6 +49,14 @@ export class AtisLetterController extends BaseController {
   }
 
   /**
+   * Refreshes the title and image on the action.
+   */
+  public override refreshDisplay = debounce(() => {
+    this.refreshTitle();
+    this.refreshImage();
+  }, 100);
+
+  /**
    * Resets the action to its default, disconnected, state.
    */
   public reset() {
@@ -60,8 +69,7 @@ export class AtisLetterController extends BaseController {
     this._pressureValue = undefined;
     this._suppressUpdates = false;
 
-    this.refreshTitle();
-    this.refreshImage();
+    this.refreshDisplay();
   }
 
   //#region Getters and setters
@@ -89,7 +97,7 @@ export class AtisLetterController extends BaseController {
 
     this._connectionStatus = newValue;
 
-    this.refreshImage();
+    this.refreshDisplay();
   }
 
   /**
@@ -201,8 +209,7 @@ export class AtisLetterController extends BaseController {
     this.unavailableImagePath = newValue.unavailableImagePath;
     this.updatedImagePath = newValue.updatedImagePath;
 
-    this.refreshTitle();
-    this.refreshImage();
+    this.refreshDisplay();
   }
 
   /**
@@ -218,7 +225,7 @@ export class AtisLetterController extends BaseController {
   public set isNewAtis(newValue: boolean) {
     this._isNewAtis = newValue;
 
-    this.refreshImage();
+    this.refreshDisplay();
   }
 
   /**
@@ -233,8 +240,8 @@ export class AtisLetterController extends BaseController {
    */
   set letter(newLetter: string | undefined) {
     this._letter = newLetter;
-    this.refreshTitle();
-    this.refreshImage(); // For cases where the state is fully responsible for displaying the content
+
+    this.refreshDisplay();
   }
 
   /**
@@ -249,8 +256,8 @@ export class AtisLetterController extends BaseController {
    */
   set wind(newWind: string | undefined) {
     this._wind = newWind;
-    this.refreshTitle();
-    this.refreshImage(); // For cases where the state is fully responsible for displaying the content
+
+    this.refreshDisplay();
   }
 
   /**
@@ -266,8 +273,7 @@ export class AtisLetterController extends BaseController {
   set altimeter(newAltimeter: string | undefined) {
     this._altimeter = newAltimeter;
 
-    this.refreshTitle();
-    this.refreshImage();
+    this.refreshDisplay();
   }
 
   /**
@@ -283,8 +289,7 @@ export class AtisLetterController extends BaseController {
   set pressureUnit(newPressureUnit: PressureUnit | undefined) {
     this._pressureUnit = newPressureUnit;
 
-    this.refreshTitle();
-    this.refreshImage();
+    this.refreshDisplay();
   }
 
   /**
@@ -300,8 +305,7 @@ export class AtisLetterController extends BaseController {
   set pressureValue(newPressureValue: number | undefined) {
     this._pressureValue = newPressureValue;
 
-    this.refreshTitle();
-    this.refreshImage();
+    this.refreshDisplay();
   }
 
   /**
@@ -329,14 +333,9 @@ export class AtisLetterController extends BaseController {
   }
 
   /**
-   * Sets the image based on the state of the action. If suppressUpdates is true
-   * nothing will happen.
+   * Sets the image based on the state of the action.
    */
-  public refreshImage() {
-    if (this._suppressUpdates) {
-      return;
-    }
-
+  private refreshImage() {
     const replacements = {
       isConnected: this.isConnected,
       isNewAtis: this.isNewAtis,
@@ -365,14 +364,9 @@ export class AtisLetterController extends BaseController {
   }
 
   /**
-   * Sets the title on the action. If suppressUpdates is true nothing
-   * will happen.
+   * Sets the title on the action.
    */
-  public refreshTitle() {
-    if (this._suppressUpdates) {
-      return;
-    }
-
+  private refreshTitle() {
     const title = new TitleBuilder();
 
     title.push(this.title, this.showTitle);

@@ -4,6 +4,7 @@ import { Controller } from "@interfaces/controller";
 import TitleBuilder from "@utils/titleBuilder";
 import { stringOrUndefined } from "@utils/utils";
 import { BaseController } from "./baseController";
+import debounce from "debounce";
 
 const defaultTemplatePath = "images/actions/vAtisStatus/template.svg";
 
@@ -25,6 +26,17 @@ export class vAtisStatusController extends BaseController {
     this.settings = settings;
   }
 
+  /**
+   * Refreshes the title and image on the action.
+   */
+  public override refreshDisplay = debounce(() => {
+    this.refreshTitle();
+    this.refreshImage();
+  }, 100);
+
+  /**
+   * Resets the state to default.
+   */
   public reset() {
     this.isConnected = false;
   }
@@ -95,8 +107,7 @@ export class vAtisStatusController extends BaseController {
       newValue.notConnectedImagePath
     );
 
-    this.refreshTitle();
-    this.refreshImage();
+    this.refreshDisplay();
   }
 
   /**
@@ -116,7 +127,7 @@ export class vAtisStatusController extends BaseController {
     }
 
     this._isConnected = newValue;
-    this.refreshImage();
+    this.refreshDisplay();
   }
 
   //#endregion
@@ -124,7 +135,7 @@ export class vAtisStatusController extends BaseController {
   /**
    * Sets the title on the action.
    */
-  public refreshTitle() {
+  private refreshTitle() {
     const title = new TitleBuilder();
 
     title.push(this.title, this.showTitle);
@@ -135,7 +146,7 @@ export class vAtisStatusController extends BaseController {
   /**
    * Sets the action image based on the isConnected state
    */
-  public refreshImage() {
+  private refreshImage() {
     const replacements = {
       isConnected: this.isConnected,
       title: this.title,

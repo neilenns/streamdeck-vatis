@@ -7,6 +7,5 @@ export interface Controller {
   type: string;
   action: KeyAction;
   reset(): void;
-  refreshImage(): void;
-  refreshTitle(): void;
+  refreshDisplay(): void;
 }

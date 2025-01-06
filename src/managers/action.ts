@@ -161,7 +161,6 @@ class ActionManager extends EventEmitter {
           action.atisType === data.value.atisType
       )
       .forEach((action) => {
-        action.suppressUpdates();
         action.connectionStatus = data.value.networkConnectionStatus;
         action.letter = data.value.atisLetter;
         action.isNewAtis = data.value.isNewAtis ?? false;
@@ -169,10 +168,8 @@ class ActionManager extends EventEmitter {
         action.altimeter = data.value.altimeter;
         action.pressureUnit = data.value.pressureUnit;
         action.pressureValue = data.value.pressureValue;
-        action.enableUpdates();
 
-        action.refreshTitle();
-        action.refreshImage();
+        action.refreshDisplay();
       });
   }
 
