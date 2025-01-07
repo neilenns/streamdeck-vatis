@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" version="1.2" width="144" height="144">
+	<defs>
+		<style>
+			.displayText {
+				fill: white;
+			}
+			.altimeterText {
+						fill: white;					
+			}
+			.background {
+				fill: black;
+			}
+		</style>
+	</defs>
+
+	<rect class="background" width="144" height="144"/>
+	<text class="displayText" x="72" y="36" font-family="Verdana" font-weight="bold" font-size="22"
+		text-anchor="middle">KPDX</text>
+	<text class="displayText" x="72" y="92" font-family="Verdana" font-weight="bold" font-size="50"
+		text-anchor="middle">B</text>
+	<text class="altimeterText" x="72" y="130" font-family="Verdana" font-weight="bold" font-size="22"
+		text-anchor="middle">A2992</text>
+</svg>
