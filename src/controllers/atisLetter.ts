@@ -8,8 +8,8 @@ import {
 } from "@interfaces/messages";
 import TitleBuilder from "@root/utils/titleBuilder";
 import { stringOrUndefined } from "@root/utils/utils";
-import { BaseController } from "./baseController";
 import debounce from "debounce";
+import { BaseController } from "./baseController";
 
 const defaultTemplatePath = "images/actions/atisLetter/template.svg";
 const defaultUnavailableTemplatePath = "images/actions/atisLetter/template.svg";
@@ -33,6 +33,7 @@ export class AtisLetterController extends BaseController {
   private _settings: AtisLetterSettings | null = null;
 
   private _currentImagePath?: string;
+  private _observerImagePath?: string;
   private _unavailableImagePath?: string;
   private _updatedImagePath?: string;
 
@@ -123,6 +124,21 @@ export class AtisLetterController extends BaseController {
   }
 
   /**
+   * Returns the observerImagePath or the default template path if the
+   * user didn't specify a custom icon.
+   */
+  get observerImagePath(): string {
+    return this._observerImagePath ?? defaultTemplatePath;
+  }
+
+  /**
+   * Sets the observerImagePath and re-compiles the SVG template if necessary.
+   */
+  set observerImagePath(newValue: string | undefined) {
+    this._observerImagePath = stringOrUndefined(newValue);
+  }
+
+  /**
    * Returns the updatedImagePath or the default template path if the user
    * didn't specify a custom icon.
    */
@@ -206,6 +222,7 @@ export class AtisLetterController extends BaseController {
     this._settings = newValue;
 
     this.currentImagePath = newValue.currentImagePath;
+    this.observerImagePath = newValue.observerImagePath;
     this.unavailableImagePath = newValue.unavailableImagePath;
     this.updatedImagePath = newValue.updatedImagePath;
 
@@ -236,7 +253,7 @@ export class AtisLetterController extends BaseController {
   }
 
   /**
-   * Sets the current AITS letter.
+   * Sets the current ATIS letter.
    */
   set letter(newLetter: string | undefined) {
     this._letter = newLetter;
@@ -325,7 +342,7 @@ export class AtisLetterController extends BaseController {
   }
 
   /**
-   * Enables automatic refreshing of the title and backgruond image when
+   * Enables automatic refreshing of the title and background image when
    * properties are updated.
    */
   public enableUpdates() {
@@ -337,7 +354,10 @@ export class AtisLetterController extends BaseController {
    */
   private refreshImage() {
     const replacements = {
-      isConnected: this.isConnected,
+      connectionStatus: this.connectionStatus,
+      isConnected:
+        this.connectionStatus === NetworkConnectionStatus.Connected ||
+        NetworkConnectionStatus.Observer,
       isNewAtis: this.isNewAtis,
       letter: this.letter,
       pressure: {
@@ -350,17 +370,22 @@ export class AtisLetterController extends BaseController {
       wind: this.wind,
     };
 
-    if (!this.isConnected) {
-      this.setImage(this.unavailableImagePath, replacements);
-      return;
-    }
-
     if (this.isNewAtis) {
       this.setImage(this.updatedImagePath, replacements);
       return;
     }
 
-    this.setImage(this.currentImagePath, replacements);
+    if (this.connectionStatus === NetworkConnectionStatus.Connected) {
+      this.setImage(this.currentImagePath, replacements);
+      return;
+    }
+
+    if (this.connectionStatus === NetworkConnectionStatus.Observer) {
+      this.setImage(this.observerImagePath, replacements);
+      return;
+    }
+
+    this.setImage(this.unavailableImagePath, replacements);
   }
 
   /**

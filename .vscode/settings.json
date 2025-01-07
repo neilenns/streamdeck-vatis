@@ -23,16 +23,19 @@
     "Addv",
     "Atis",
     "atisletter",
+    "callsign",
     "elgato",
     "getv",
     "handlev",
     "KHIO",
-    "KLMT",
     "KPDX",
+    "KUAO",
+    "KLMT",
     "streamdeck",
     "Typeguard",
     "Updatev",
     "vatis",
-    "vatisstatus"
+    "vatisstatus",
+    "Verdana"
   ]
 }

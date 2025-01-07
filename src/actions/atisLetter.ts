@@ -87,6 +87,7 @@ export interface AtisLetterSettings {
   showAltimeter?: boolean;
   showWind?: boolean;
   currentImagePath?: string;
+  observerImagePath?: string;
   showLetter?: boolean;
   showTitle?: boolean;
   station?: string;
