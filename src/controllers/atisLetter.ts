@@ -125,6 +125,14 @@ export class AtisLetterController extends BaseController {
   }
 
   /**
+   * Gets the show FAA flight rules setting.
+   * @returns {boolean} True if the flight rules indicator should show. Defaults to true if no setting is provided.
+   */
+  get showFaaFlightRules(): boolean {
+    return this.settings.showFaaFlightRules ?? true;
+  }
+
+  /**
    * Gets the FAA flight rules for the current ATIS.
    * @returns {FaaFlightRules} The current FAA flight rules.
    */
@@ -395,63 +403,6 @@ export class AtisLetterController extends BaseController {
   }
 
   /**
-   * Disables automatic refreshing of the title and background image when
-   * properties are updated. Useful when multiple properties will be updated
-   * in quick succession to avoid unnecessary re-renders.
-   */
-  public suppressUpdates() {
-    this._suppressUpdates = true;
-  }
-
-  /**
-   * Enables automatic refreshing of the title and background image when
-   * properties are updated.
-   */
-  public enableUpdates() {
-    this._suppressUpdates = false;
-  }
-
-  /**
-   * Sets the image based on the state of the action.
-   */
-  private refreshImage() {
-    const replacements = {
-      connectionStatus: this.connectionStatus,
-      isConnected:
-        this.connectionStatus === NetworkConnectionStatus.Connected ||
-        NetworkConnectionStatus.Observer,
-      isNewAtis: this.isNewAtis,
-      letter: this.letter,
-      pressure: {
-        unit: this.pressure?.actualUnit,
-        value: this.pressure?.actualValue,
-        formattedValue: this.altimeter,
-      },
-      station: this.station,
-      title: this.title,
-      wind: this.wind,
-      faaFlightRules: this.faaFlightRules,
-    };
-
-    if (this.isNewAtis) {
-      this.setImage(this.updatedImagePath, replacements);
-      return;
-    }
-
-    if (this.connectionStatus === NetworkConnectionStatus.Connected) {
-      this.setImage(this.currentImagePath, replacements);
-      return;
-    }
-
-    if (this.connectionStatus === NetworkConnectionStatus.Observer) {
-      this.setImage(this.observerImagePath, replacements);
-      return;
-    }
-
-    this.setImage(this.unavailableImagePath, replacements);
-  }
-
-  /**
    * Calculates FAA flight rules based on ceiling and visibility values.
    * @param {Value | undefined} ceiling - The ceiling height in hundreds of feet.
    * @param {Value | undefined} prevailingVisibility - The visibility in statute miles.
@@ -512,6 +463,64 @@ export class AtisLetterController extends BaseController {
     } else {
       this.faaFlightRules = FaaFlightRules.UNKNOWN;
     }
+  }
+
+  /**
+   * Disables automatic refreshing of the title and background image when
+   * properties are updated. Useful when multiple properties will be updated
+   * in quick succession to avoid unnecessary re-renders.
+   */
+  public suppressUpdates() {
+    this._suppressUpdates = true;
+  }
+
+  /**
+   * Enables automatic refreshing of the title and background image when
+   * properties are updated.
+   */
+  public enableUpdates() {
+    this._suppressUpdates = false;
+  }
+
+  /**
+   * Sets the image based on the state of the action.
+   */
+  private refreshImage() {
+    const replacements = {
+      connectionStatus: this.connectionStatus,
+      isConnected:
+        this.connectionStatus === NetworkConnectionStatus.Connected ||
+        NetworkConnectionStatus.Observer,
+      isNewAtis: this.isNewAtis,
+      letter: this.letter,
+      pressure: {
+        unit: this.pressure?.actualUnit,
+        value: this.pressure?.actualValue,
+        formattedValue: this.altimeter,
+      },
+      station: this.station,
+      title: this.title,
+      wind: this.wind,
+      faaFlightRules: this.faaFlightRules,
+      showFaaFlightRules: this.showFaaFlightRules,
+    };
+
+    if (this.isNewAtis) {
+      this.setImage(this.updatedImagePath, replacements);
+      return;
+    }
+
+    if (this.connectionStatus === NetworkConnectionStatus.Connected) {
+      this.setImage(this.currentImagePath, replacements);
+      return;
+    }
+
+    if (this.connectionStatus === NetworkConnectionStatus.Observer) {
+      this.setImage(this.observerImagePath, replacements);
+      return;
+    }
+
+    this.setImage(this.unavailableImagePath, replacements);
   }
 
   /**
