@@ -41,7 +41,7 @@ export class AtisLetterController extends BaseController {
   private _wind?: string;
   private _altimeter?: string;
   private _pressure?: Value;
-  private _faaFlightRules: FaaFlightRules = FaaFlightRules.VFR;
+  private _faaFlightRules: FaaFlightRules = FaaFlightRules.UNKNOWN;
 
   private _suppressUpdates: boolean;
   private _settings: AtisLetterSettings | null = null;
@@ -86,7 +86,7 @@ export class AtisLetterController extends BaseController {
     this._wind = undefined;
     this._pressure = undefined;
     this._suppressUpdates = false;
-    this._faaFlightRules = FaaFlightRules.VFR;
+    this._faaFlightRules = FaaFlightRules.UNKNOWN;
 
     this.refreshDisplay();
   }
