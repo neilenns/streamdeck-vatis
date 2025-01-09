@@ -15,6 +15,9 @@ import { BaseController } from "./baseController";
 const defaultTemplatePath = "images/actions/atisLetter/template.svg";
 const defaultUnavailableTemplatePath = "images/actions/atisLetter/template.svg";
 
+/**
+ * Maximum cloud level in feet. Used as a fallback when no ceiling data is available.
+ */
 const MAX_CLOUD_LEVEL = 9999;
 
 /**
@@ -450,7 +453,7 @@ export class AtisLetterController extends BaseController {
       return;
     }
 
-    // The checks are in this order to ensure the most restrctive, rather than least restrictive,
+    // The checks are in this order to ensure the most restrictive, rather than least restrictive,
     // is applied. Values from https://www.faasafety.gov/files/gslac/courses/content/38/472/6.2%20Personal%20Minimums%20Worksheet.pdf
     if (visibility < 1 || cloudLevel < 5) {
       this.faaFlightRules = FaaFlightRules.LIFR;
