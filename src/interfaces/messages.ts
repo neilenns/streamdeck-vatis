@@ -11,7 +11,7 @@ export enum AtisType {
   Arrival = "Arrival",
 }
 
-export enum PressureUnit {
+export enum Unit {
   Degree = "deg",
   DegreeCelcius = "deg C",
   Feet = "ft",
@@ -23,6 +23,11 @@ export enum PressureUnit {
   MeterPerSecond = "m/s",
   StatueMile = "SM",
   UnknownUnit = "N/A",
+}
+
+export interface Value {
+  actualValue: number;
+  actualUnit: Unit;
 }
 
 export interface Atis {
@@ -38,7 +43,9 @@ export interface Atis {
     isNewAtis?: boolean;
     atisLetter?: string;
     pressureValue?: number;
-    pressureUnit?: PressureUnit;
+    pressureUnit?: Unit;
+    ceiling?: Value;
+    prevailingVisibility?: Value;
   };
 }
 

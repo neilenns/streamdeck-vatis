@@ -2,9 +2,11 @@ import { AtisLetterSettings } from "@actions/atisLetter";
 import { KeyAction } from "@elgato/streamdeck";
 import { Controller } from "@interfaces/controller";
 import {
+  Atis,
   AtisType,
   NetworkConnectionStatus,
-  PressureUnit,
+  Unit,
+  Value,
 } from "@interfaces/messages";
 import TitleBuilder from "@root/utils/titleBuilder";
 import { stringOrUndefined } from "@root/utils/utils";
@@ -13,6 +15,17 @@ import { BaseController } from "./baseController";
 
 const defaultTemplatePath = "images/actions/atisLetter/template.svg";
 const defaultUnavailableTemplatePath = "images/actions/atisLetter/template.svg";
+
+/**
+ * Flight rules categories according to FAA standards
+ */
+enum FaaFlightRules {
+  VFR = "VFR", // Visual Flight Rules
+  MVFR = "MVFR", // Marginal Visual Flight Rules
+  IFR = "IFR", // Instrument Flight Rules
+  LIFR = "LIFR", // Low Instrument Flight Rules
+  UNKNOWN = "Unknown", // Flight rules couldn't be calculated
+}
 
 /**
  * A StationStatus action, for use with ActionManager. Tracks the settings,
@@ -26,8 +39,9 @@ export class AtisLetterController extends BaseController {
   private _letter?: string;
   private _wind?: string;
   private _altimeter?: string;
-  private _pressureUnit?: PressureUnit;
+  private _pressureUnit?: Unit;
   private _pressureValue?: number;
+  private _faaFlightRules: FaaFlightRules = FaaFlightRules.VFR;
 
   private _suppressUpdates: boolean;
   private _settings: AtisLetterSettings | null = null;
@@ -53,6 +67,10 @@ export class AtisLetterController extends BaseController {
    * Refreshes the title and image on the action.
    */
   public override refreshDisplay = debounce(() => {
+    if (this._suppressUpdates) {
+      return;
+    }
+
     this.refreshTitle();
     this.refreshImage();
   }, 100);
@@ -69,6 +87,7 @@ export class AtisLetterController extends BaseController {
     this._pressureUnit = undefined;
     this._pressureValue = undefined;
     this._suppressUpdates = false;
+    this._faaFlightRules = FaaFlightRules.VFR;
 
     this.refreshDisplay();
   }
@@ -97,6 +116,26 @@ export class AtisLetterController extends BaseController {
     }
 
     this._connectionStatus = newValue;
+
+    this.refreshDisplay();
+  }
+
+  /**
+   * Returns the FAA flight rules for the current ATIS.
+   */
+  get FaaFlightRules() {
+    return this._faaFlightRules;
+  }
+
+  /**
+   * Sets the FAA flight rules for the current ATIS.
+   */
+  set FaaFlightRules(newValue: FaaFlightRules) {
+    if (this._faaFlightRules === newValue) {
+      return;
+    }
+
+    this._faaFlightRules = newValue;
 
     this.refreshDisplay();
   }
@@ -296,14 +335,14 @@ export class AtisLetterController extends BaseController {
   /**
    * Gets the current pressure unit.
    */
-  get pressureUnit(): PressureUnit | undefined {
+  get pressureUnit(): Unit | undefined {
     return this._pressureUnit;
   }
 
   /**
    * Sets the current pressure unit
    */
-  set pressureUnit(newPressureUnit: PressureUnit | undefined) {
+  set pressureUnit(newPressureUnit: Unit | undefined) {
     this._pressureUnit = newPressureUnit;
 
     this.refreshDisplay();
@@ -332,6 +371,28 @@ export class AtisLetterController extends BaseController {
     return this.settings.title;
   }
   //#endregion
+
+  /**
+   * Updates the controller with new ATIS data.
+   * @param data The new ATIS data
+   */
+  public updateAtis(data: Atis) {
+    const { value } = data;
+
+    this.suppressUpdates();
+    this.connectionStatus = value.networkConnectionStatus;
+    this.letter = value.atisLetter;
+    this.isNewAtis = value.isNewAtis ?? false;
+    this.wind = value.wind;
+    this.altimeter = value.altimeter;
+    this.pressureUnit = value.pressureUnit;
+    this.pressureValue = value.pressureValue;
+    this.calculateFaaFlightRules(value.ceiling, value.prevailingVisibility);
+    this.enableUpdates();
+
+    this.refreshDisplay();
+  }
+
   /**
    * Disables automatic refreshing of the title and background image when
    * properties are updated. Useful when multiple properties will be updated
@@ -368,6 +429,7 @@ export class AtisLetterController extends BaseController {
       station: this.station,
       title: this.title,
       wind: this.wind,
+      faaFlightRules: this.FaaFlightRules,
     };
 
     if (this.isNewAtis) {
@@ -386,6 +448,32 @@ export class AtisLetterController extends BaseController {
     }
 
     this.setImage(this.unavailableImagePath, replacements);
+  }
+
+  private calculateFaaFlightRules(
+    ceiling?: Value,
+    prevailingVisibility?: Value
+  ) {
+    // No visiblity data means the flight rules can't be calculated.
+    if (!prevailingVisibility) {
+      this.FaaFlightRules = FaaFlightRules.UNKNOWN;
+      return;
+    }
+
+    const cloudLevel = ceiling?.actualValue ?? 9999; // If no ceiling is provided assume it is really high so the tests work out
+    const visibility = prevailingVisibility.actualValue;
+
+    if (visibility > 5 && cloudLevel > 30) {
+      this.FaaFlightRules = FaaFlightRules.VFR;
+    } else if (visibility >= 3 || (cloudLevel > 1000 && cloudLevel <= 3000)) {
+      this.FaaFlightRules = FaaFlightRules.MVFR;
+    } else if (visibility >= 1 || (cloudLevel >= 500 && cloudLevel <= 1000)) {
+      this.FaaFlightRules = FaaFlightRules.IFR;
+    } else if (visibility < 1 || cloudLevel < 500) {
+      this.FaaFlightRules = FaaFlightRules.LIFR;
+    } else {
+      this.FaaFlightRules = FaaFlightRules.UNKNOWN;
+    }
   }
 
   /**
