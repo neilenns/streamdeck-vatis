@@ -5,6 +5,7 @@ import {
   Atis,
   AtisType,
   NetworkConnectionStatus,
+  Unit,
   Value,
 } from "@interfaces/messages";
 import TitleBuilder from "@root/utils/titleBuilder";
@@ -18,7 +19,7 @@ const defaultUnavailableTemplatePath = "images/actions/atisLetter/template.svg";
 /**
  * Maximum cloud level in feet. Used as a fallback when no ceiling data is available.
  */
-const MAX_CLOUD_LEVEL = 9999;
+const DEFAULT_CEILING_LEVEL_FEET = 9999;
 
 /**
  * Flight rules categories according to FAA standards
@@ -123,9 +124,10 @@ export class AtisLetterController extends BaseController {
   }
 
   /**
-   * Returns the FAA flight rules for the current ATIS.
+   * Gets the FAA flight rules for the current ATIS.
+   * @returns {FaaFlightRules} The current FAA flight rules.
    */
-  get faaFlightRules() {
+  get faaFlightRules(): FaaFlightRules {
     return this._faaFlightRules;
   }
 
@@ -143,111 +145,118 @@ export class AtisLetterController extends BaseController {
   }
 
   /**
-   * Returns the callsign for the ATIS action.
+   * Gets the name for the ATIS action.
+   * @returns {string | undefined} The station name.
    */
-  get station() {
+  get station(): string | undefined {
     return this.settings.station;
   }
 
   /**
-   * Returns the currentImagePath or the default template path if the
-   * user didn't specify a custom icon.
+   * Gets the path to the current image asset.
+   * @returns {string} The current image path or the default template path if the user didn't specify a custom image.
    */
   get currentImagePath(): string {
     return this._currentImagePath ?? defaultTemplatePath;
   }
 
   /**
-   * Sets the currentImagePath and re-compiles the SVG template if necessary.
+   * Sets the current image path and re-compiles the SVG template if necessary.
    */
   set currentImagePath(newValue: string | undefined) {
     this._currentImagePath = stringOrUndefined(newValue);
   }
 
   /**
-   * Returns the observerImagePath or the default template path if the
-   * user didn't specify a custom icon.
+   * Gets the path to the observer image asset.
+   * @returns {string} The observer image path or the default template path if the user didn't specify a custom image.
    */
   get observerImagePath(): string {
     return this._observerImagePath ?? defaultTemplatePath;
   }
 
   /**
-   * Sets the observerImagePath and re-compiles the SVG template if necessary.
+   * Sets the observer image path and re-compiles the SVG template if necessary.
    */
   set observerImagePath(newValue: string | undefined) {
     this._observerImagePath = stringOrUndefined(newValue);
   }
 
   /**
-   * Returns the updatedImagePath or the default template path if the user
-   * didn't specify a custom icon.
+   * Gets the path to the updated image asset.
+   * @returns {string} The updated image path or the default template path if the user didn't specify a custom image.
    */
   get updatedImagePath(): string {
     return this._updatedImagePath ?? defaultTemplatePath;
   }
 
   /**
-   * Sets the updatedImagePath and re-compiles the SVG template if necessary.
+   * Sets the updated image path and re-compiles the SVG template if necessary.
    */
   set updatedImagePath(newValue: string | undefined) {
     this._updatedImagePath = stringOrUndefined(newValue);
   }
 
   /**
-   * Returns the unavailableImagePath or the default unavailable template path
-   * if the user didn't specify a custom icon.
+   * Gets the path to the unavailable image asset.
+   * @returns {string} The unavailable image path or the default template path if the user didn't specify a custom image.
    */
   get unavailableImagePath(): string {
     return this._unavailableImagePath ?? defaultUnavailableTemplatePath;
   }
 
   /**
-   * Sets the unavailableImagePath and re-compiles the SVG template if necessary.
+   * Sets the unavailable image path and re-compiles the SVG template if necessary.
    */
   set unavailableImagePath(newValue: string | undefined) {
     this._unavailableImagePath = stringOrUndefined(newValue);
   }
 
   /**
-   * Returns the atisType setting, or Combined if undefined.
+   * Gets the atisType setting.
+   * @returns {AtisType} The atisType for the station, or Combined if undefined.
    */
-  get atisType() {
+  get atisType(): AtisType {
     return this.settings.atisType ?? AtisType.Combined;
   }
 
   /**
-   * Returns the showTitle setting, or false if undefined.
+   * Gets the showTitle setting.
+   * @returns {boolean} The setting, or false if undefined.
    */
-  get showTitle() {
+  get showTitle(): boolean {
     return this.settings.showTitle ?? false;
   }
 
   /**
-   * Returns the showLetter setting, or false if undefined.
+   * Gets the showLetter setting.
+   * @returns {boolean} The setting, or false if undefined.
    */
-  get showLetter() {
+  get showLetter(): boolean {
     return this.settings.showLetter ?? false;
   }
 
   /**
-   * Returns the showAltimeter setting, or false if undefined.
+   * Gets the showAltimeter setting
+   * @returns {boolean} The setting, or false if undefined.
    */
-  get showAltimeter() {
+  get showAltimeter(): boolean {
     return this.settings.showAltimeter ?? false;
   }
 
   /**
-   * Returns the showWind setting, or false if undefined.
+   * Gets the showWind setting.
+   * @returns {boolean} The setting, or false if undefined.
    */
-  get showWind() {
+  get showWind(): boolean {
     return this.settings.showWind ?? false;
   }
 
   /**
    * Gets the settings.
+   * @returns {AtisLetterSettings} The settings.
    */
-  get settings() {
+  get settings(): AtisLetterSettings {
     if (this._settings === null) {
       throw new Error("Settings not initialized. This should never happen.");
     }
@@ -271,14 +280,15 @@ export class AtisLetterController extends BaseController {
   }
 
   /**
-   * Gets the isUpdated state on the action.
+   * Gets the isNewAtis state on the action.
+   * @returns {boolean} True if the ATIS is new.
    */
-  public get isNewAtis() {
+  public get isNewAtis(): boolean {
     return this._isNewAtis;
   }
 
   /**
-   * Sets the isUpdated state on the action and refreshes the state image to match.
+   * Sets the isNewAtis state on the action and refreshes the state image to match.
    */
   public set isNewAtis(newValue: boolean) {
     this._isNewAtis = newValue;
@@ -288,6 +298,7 @@ export class AtisLetterController extends BaseController {
 
   /**
    * Gets the current ATIS letter.
+   * @returns {string | undefined} The current ATIS letter or undefined if none is available.
    */
   get letter(): string | undefined {
     return this._letter;
@@ -304,6 +315,7 @@ export class AtisLetterController extends BaseController {
 
   /**
    * Gets the current wind.
+   * @returns {string | undefined} The current wind or undefined if none is available.
    */
   get wind(): string | undefined {
     return this._wind;
@@ -320,13 +332,14 @@ export class AtisLetterController extends BaseController {
 
   /**
    * Gets the current altimeter.
+   * @returns {string | undefined} The current altimeter or undefined if none is available.
    */
   get altimeter(): string | undefined {
     return this._altimeter;
   }
 
   /**
-   * Sets the current altimeter
+   * Sets the current altimeter.
    */
   set altimeter(newAltimeter: string | undefined) {
     this._altimeter = newAltimeter;
@@ -336,24 +349,26 @@ export class AtisLetterController extends BaseController {
 
   /**
    * Gets the current pressure.
+   * @returns {Value} The current pressure or undefined if none is available.
    */
   get pressure(): Value | undefined {
     return this._pressure;
   }
 
   /**
-   * Sets the current pressure unit
+   * Sets the current pressure.
    */
-  set pressure(newPressureUnit: Value | undefined) {
-    this._pressure = newPressureUnit;
+  set pressure(newValue: Value | undefined) {
+    this._pressure = newValue;
 
     this.refreshDisplay();
   }
 
   /**
-   * Convenience method to return the action's title from settings.
+   * Gets the action's title from settings.
+   * @returns {string | undefined} The title or undefined if no title is specified.
    */
-  get title() {
+  get title(): string | undefined {
     return this.settings.title;
   }
   //#endregion
@@ -439,13 +454,30 @@ export class AtisLetterController extends BaseController {
     ceiling?: Value,
     prevailingVisibility?: Value
   ) {
-    // No visiblity data means the flight rules can't be calculated.
+    // No visibility data means the flight rules can't be calculated.
     if (!prevailingVisibility) {
       this.faaFlightRules = FaaFlightRules.UNKNOWN;
       return;
     }
 
-    const cloudLevel = ceiling?.actualValue ?? MAX_CLOUD_LEVEL; // If no ceiling is provided assume it is really high so the tests work out
+    // If the ceiling is null then set it to the default.
+    if (!ceiling) {
+      ceiling = {
+        actualValue: DEFAULT_CEILING_LEVEL_FEET,
+        actualUnit: Unit.Feet,
+      };
+    }
+
+    // FAA rules are only applicable to statute miles and feet
+    if (
+      prevailingVisibility.actualUnit !== Unit.StatuteMile ||
+      ceiling.actualUnit !== Unit.Feet
+    ) {
+      this.faaFlightRules = FaaFlightRules.UNKNOWN;
+      return;
+    }
+
+    const cloudLevel = ceiling.actualValue;
     const visibility = prevailingVisibility.actualValue;
 
     if (visibility < 0 || cloudLevel < 0) {
