@@ -9,7 +9,6 @@ import vAtisManager from "@managers/vatis";
 import actionManager from "@managers/action";
 
 // Event handlers
-import { handleActionAdded } from "@events/action/actionAdded";
 import { handleActionRemoved } from "@events/action/actionRemoved";
 import { handleAtisLetterAdded } from "@events/action/atisLetterAdded";
 import { handleAtisLetterUpdated } from "@events/action/atisLetterUpdated";
@@ -52,7 +51,6 @@ vAtisManager.on("disconnected", () => {
 });
 vAtisManager.on("atisUpdate", handleAtisUpdate);
 
-actionManager.on("actionAdded", handleActionAdded);
 actionManager.on("actionRemoved", handleActionRemoved);
 actionManager.on("atisLetterAdded", handleAtisLetterAdded);
 actionManager.on("atisLetterUpdated", handleAtisLetterUpdated);
