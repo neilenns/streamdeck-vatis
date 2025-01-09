@@ -464,7 +464,7 @@ export class AtisLetterController extends BaseController {
     const visibility = prevailingVisibility.actualValue;
 
     // The checks are in this order to ensure the most restrctive, rather than least restrictive,
-    // is applied.
+    // is applied. Values from https://www.faasafety.gov/files/gslac/courses/content/38/472/6.2%20Personal%20Minimums%20Worksheet.pdf
     if (visibility < 1 || cloudLevel < 500) {
       this.FaaFlightRules = FaaFlightRules.LIFR;
     } else if (
