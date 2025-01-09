@@ -530,9 +530,9 @@ export class AtisLetterController extends BaseController {
 }
 
 /*
- * Typeguard for HotlineController.
- * @param action The action
- * @returns True if the action is a HotlineController
+ * Typeguard for AtisLetterController.
+ * @param action The action.
+ * @returns True if the action is a AtisLetterController.
  */
 export function isAtisLetterController(
   action: Controller
