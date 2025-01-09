@@ -38,7 +38,7 @@ class VatisManager extends EventEmitter {
 
   /**
    * Sets whether the vATIS application is running.
-   * @params newValue True if running.
+   * @param {boolean} newValue True if running.
    */
   public set isAppRunning(newValue: boolean) {
     this._isAppRunning = newValue;
@@ -46,7 +46,7 @@ class VatisManager extends EventEmitter {
 
   /**
    * Sets the connection URL for vATIS.
-   * @param url The URL for the vATIS instance
+   * @param {stirng} url The URL for the vATIS instance
    */
   public setUrl(url: string) {
     this.url = url;
