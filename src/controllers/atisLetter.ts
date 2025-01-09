@@ -450,6 +450,12 @@ export class AtisLetterController extends BaseController {
     this.setImage(this.unavailableImagePath, replacements);
   }
 
+  /**
+   * Calculates FAA flight rules based on ceiling and visibility values.
+   * @param {Value | undefined} ceiling - The ceiling height in hundreds of feet.
+   * @param {Value | undefined} prevailingVisibility - The visibility in statute miles.
+   * @private
+   */
   private calculateFaaFlightRules(
     ceiling?: Value,
     prevailingVisibility?: Value
