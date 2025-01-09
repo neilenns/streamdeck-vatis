@@ -16,5 +16,4 @@ export const handleAddvAtisStatus = (
 
   actionManager.add(controller);
   actionManager.emit("vAtisStatusAdded", controller);
-  actionManager.emit("actionAdded", controller);
 };
