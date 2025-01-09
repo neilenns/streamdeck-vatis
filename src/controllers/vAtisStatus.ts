@@ -5,11 +5,12 @@ import TitleBuilder from "@utils/titleBuilder";
 import { stringOrUndefined } from "@utils/utils";
 import { BaseController } from "./baseController";
 import debounce from "debounce";
+import { VATIS_STATUS_CONTROLLER_TYPE } from "@utils/controllerTypes";
 
 const defaultTemplatePath = "images/actions/vAtisStatus/template.svg";
 
 export class vAtisStatusController extends BaseController {
-  type = "vAtisStatusController";
+  type = VATIS_STATUS_CONTROLLER_TYPE;
 
   private _isConnected = false;
   private _settings: vAtisStatusSettings | null = null;
@@ -169,5 +170,5 @@ export class vAtisStatusController extends BaseController {
 export function isvAtisStatusController(
   action: Controller
 ): action is vAtisStatusController {
-  return action.type === "vAtisStatusController";
+  return action.type === VATIS_STATUS_CONTROLLER_TYPE;
 }
