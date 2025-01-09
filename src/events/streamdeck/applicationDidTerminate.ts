@@ -8,5 +8,6 @@ export const handleOnApplicationDidTerminate = (
   ev: ApplicationDidTerminateEvent
 ) => {
   logger.info("Received applicationDidTerminate event", ev.application);
+  vAtisManager.isAppRunning = false;
   vAtisManager.disconnect();
 };

@@ -6,5 +6,6 @@ const logger = mainLogger.child({ service: "applicationDidLaunch" });
 
 export const handleOnApplicationDidLaunch = (ev: ApplicationDidLaunchEvent) => {
   logger.info("Received applicationDidLaunch event", ev.application);
+  vAtisManager.isAppRunning = true;
   vAtisManager.connect();
 };
