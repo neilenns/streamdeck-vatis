@@ -42,8 +42,7 @@ export interface Atis {
     altimeter?: string;
     isNewAtis?: boolean;
     atisLetter?: string;
-    pressureValue?: number;
-    pressureUnit?: Unit;
+    pressure?: Value;
     ceiling?: Value;
     prevailingVisibility?: Value;
   };

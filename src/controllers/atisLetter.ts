@@ -5,7 +5,6 @@ import {
   Atis,
   AtisType,
   NetworkConnectionStatus,
-  Unit,
   Value,
 } from "@interfaces/messages";
 import TitleBuilder from "@root/utils/titleBuilder";
@@ -39,8 +38,7 @@ export class AtisLetterController extends BaseController {
   private _letter?: string;
   private _wind?: string;
   private _altimeter?: string;
-  private _pressureUnit?: Unit;
-  private _pressureValue?: number;
+  private _pressure?: Value;
   private _faaFlightRules: FaaFlightRules = FaaFlightRules.VFR;
 
   private _suppressUpdates: boolean;
@@ -84,8 +82,7 @@ export class AtisLetterController extends BaseController {
     this._connectionStatus = undefined;
     this._altimeter = undefined;
     this._wind = undefined;
-    this._pressureUnit = undefined;
-    this._pressureValue = undefined;
+    this._pressure = undefined;
     this._suppressUpdates = false;
     this._faaFlightRules = FaaFlightRules.VFR;
 
@@ -333,33 +330,17 @@ export class AtisLetterController extends BaseController {
   }
 
   /**
-   * Gets the current pressure unit.
+   * Gets the current pressure.
    */
-  get pressureUnit(): Unit | undefined {
-    return this._pressureUnit;
+  get pressure(): Value | undefined {
+    return this._pressure;
   }
 
   /**
    * Sets the current pressure unit
    */
-  set pressureUnit(newPressureUnit: Unit | undefined) {
-    this._pressureUnit = newPressureUnit;
-
-    this.refreshDisplay();
-  }
-
-  /**
-   * Gets the current pressure value
-   */
-  get pressureValue(): number | undefined {
-    return this._pressureValue;
-  }
-
-  /**
-   * Sets the current pressure value
-   */
-  set pressureValue(newPressureValue: number | undefined) {
-    this._pressureValue = newPressureValue;
+  set pressure(newPressureUnit: Value | undefined) {
+    this._pressure = newPressureUnit;
 
     this.refreshDisplay();
   }
@@ -385,8 +366,7 @@ export class AtisLetterController extends BaseController {
     this.isNewAtis = value.isNewAtis ?? false;
     this.wind = value.wind;
     this.altimeter = value.altimeter;
-    this.pressureUnit = value.pressureUnit;
-    this.pressureValue = value.pressureValue;
+    this.pressure = value.pressure;
     this.calculateFaaFlightRules(value.ceiling, value.prevailingVisibility);
     this.enableUpdates();
 
@@ -422,8 +402,8 @@ export class AtisLetterController extends BaseController {
       isNewAtis: this.isNewAtis,
       letter: this.letter,
       pressure: {
-        unit: this.pressureUnit,
-        value: this.pressureValue,
+        unit: this.pressure?.actualUnit,
+        value: this.pressure?.actualValue,
         formattedValue: this.altimeter,
       },
       station: this.station,
@@ -465,16 +445,16 @@ export class AtisLetterController extends BaseController {
 
     // The checks are in this order to ensure the most restrctive, rather than least restrictive,
     // is applied. Values from https://www.faasafety.gov/files/gslac/courses/content/38/472/6.2%20Personal%20Minimums%20Worksheet.pdf
-    if (visibility < 1 || cloudLevel < 500) {
+    if (visibility < 1 || cloudLevel < 5) {
       this.FaaFlightRules = FaaFlightRules.LIFR;
     } else if (
       (visibility >= 1 && visibility < 3) ||
-      (cloudLevel >= 500 && cloudLevel <= 999)
+      (cloudLevel >= 5 && cloudLevel < 10)
     ) {
       this.FaaFlightRules = FaaFlightRules.IFR;
     } else if (
       (visibility >= 3 && visibility <= 5) ||
-      (cloudLevel >= 1000 && cloudLevel <= 3000)
+      (cloudLevel >= 10 && cloudLevel <= 30)
     ) {
       this.FaaFlightRules = FaaFlightRules.MVFR;
     } else if (visibility > 5 && cloudLevel > 30) {
