@@ -12,6 +12,7 @@ import TitleBuilder from "@root/utils/titleBuilder";
 import { stringOrUndefined } from "@root/utils/utils";
 import debounce from "debounce";
 import { BaseController } from "./baseController";
+import { ATIS_LETTER_CONTROLLER_TYPE } from "@utils/controllerTypes";
 
 const defaultTemplatePath = "images/actions/atisLetter/template.svg";
 const defaultUnavailableTemplatePath = "images/actions/atisLetter/template.svg";
@@ -37,7 +38,7 @@ enum FaaFlightRules {
  * state and Stream Deck action for an individual action in a profile.
  */
 export class AtisLetterController extends BaseController {
-  type = "AtisLetterController";
+  type = ATIS_LETTER_CONTROLLER_TYPE;
 
   private _connectionStatus: NetworkConnectionStatus | undefined = undefined;
   private _isNewAtis = false;
@@ -529,12 +530,12 @@ export class AtisLetterController extends BaseController {
 }
 
 /*
- * Typeguard for HotlineController.
- * @param action The action
- * @returns True if the action is a HotlineController
+ * Typeguard for AtisLetterController.
+ * @param action The action.
+ * @returns True if the action is a AtisLetterController.
  */
 export function isAtisLetterController(
   action: Controller
 ): action is AtisLetterController {
-  return action.type === "AtisLetterController";
+  return action.type === ATIS_LETTER_CONTROLLER_TYPE;
 }
