@@ -11,6 +11,7 @@ class VatisManager extends EventEmitter {
   private reconnectInterval = 1000 * 5; // 5 seconds
   private url = "ws://127.0.0.1:49082/";
   private reconnectTimer: NodeJS.Timeout | null = null;
+  private _isAppRunning = false;
 
   private constructor() {
     super();
@@ -28,8 +29,24 @@ class VatisManager extends EventEmitter {
   }
 
   /**
+   * Gets whether the vATIS application was detected as running by Stream Deck.
+   * @returns {boolean} True if running.
+   */
+  public get isAppRunning(): boolean {
+    return this._isAppRunning;
+  }
+
+  /**
+   * Sets whether the vATIS application is running.
+   * @param {boolean} newValue True if running.
+   */
+  public set isAppRunning(newValue: boolean) {
+    this._isAppRunning = newValue;
+  }
+
+  /**
    * Sets the connection URL for vATIS.
-   * @param url The URL for the vATIS instance
+   * @param {string} url The URL for the vATIS instance
    */
   public setUrl(url: string) {
     this.url = url;

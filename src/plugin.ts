@@ -1,19 +1,24 @@
+// SDKs
 import streamDeck from "@elgato/streamdeck";
 import { vAtisAudioStatus } from "@actions/vAtisStatus";
+import { AtisLetter } from "@actions/atisLetter";
 import mainLogger from "@utils/logger";
+
+// Managers
 import vAtisManager from "@managers/vatis";
 import actionManager from "@managers/action";
 
-import { handleConnected } from "@events/vAtis/connected";
-import { handleDisconnected } from "@events/vAtis/disconnected";
+// Event handlers
 import { handleActionAdded } from "@events/action/actionAdded";
 import { handleActionRemoved } from "@events/action/actionRemoved";
-import { AtisLetter } from "@actions/atisLetter";
 import { handleAtisLetterAdded } from "@events/action/atisLetterAdded";
 import { handleAtisLetterUpdated } from "@events/action/atisLetterUpdated";
 import { handleAtisUpdate } from "@events/vAtis/atisUpdate";
+import { handleConnected } from "@events/vAtis/connected";
+import { handleDisconnected } from "@events/vAtis/disconnected";
 import { handleOnApplicationDidLaunch } from "@events/streamdeck/applicationDidLaunch";
 import { handleOnApplicationDidTerminate } from "@events/streamdeck/applicationDidTerminate";
+import { handleOnSystemDidWakeUp } from "@events/streamdeck/systemDidWakeUp";
 
 const logger = mainLogger.child({ service: "plugin" });
 
@@ -32,6 +37,7 @@ streamDeck.actions.registerAction(new AtisLetter());
 // Register event handlers
 streamDeck.system.onApplicationDidLaunch(handleOnApplicationDidLaunch);
 streamDeck.system.onApplicationDidTerminate(handleOnApplicationDidTerminate);
+streamDeck.system.onSystemDidWakeUp(handleOnSystemDidWakeUp);
 
 vAtisManager.on("connected", () => {
   disconnectHandled = false;
