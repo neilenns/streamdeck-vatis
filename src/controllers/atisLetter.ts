@@ -463,14 +463,22 @@ export class AtisLetterController extends BaseController {
     const cloudLevel = ceiling?.actualValue ?? 9999; // If no ceiling is provided assume it is really high so the tests work out
     const visibility = prevailingVisibility.actualValue;
 
-    if (visibility > 5 && cloudLevel > 30) {
-      this.FaaFlightRules = FaaFlightRules.VFR;
-    } else if (visibility >= 3 || (cloudLevel > 1000 && cloudLevel <= 3000)) {
-      this.FaaFlightRules = FaaFlightRules.MVFR;
-    } else if (visibility >= 1 || (cloudLevel >= 500 && cloudLevel <= 1000)) {
-      this.FaaFlightRules = FaaFlightRules.IFR;
-    } else if (visibility < 1 || cloudLevel < 500) {
+    // The checks are in this order to ensure the most restrctive, rather than least restrictive,
+    // is applied.
+    if (visibility < 1 || cloudLevel < 500) {
       this.FaaFlightRules = FaaFlightRules.LIFR;
+    } else if (
+      (visibility >= 1 && visibility < 3) ||
+      (cloudLevel >= 500 && cloudLevel <= 999)
+    ) {
+      this.FaaFlightRules = FaaFlightRules.IFR;
+    } else if (
+      (visibility >= 3 && visibility <= 5) ||
+      (cloudLevel >= 1000 && cloudLevel <= 3000)
+    ) {
+      this.FaaFlightRules = FaaFlightRules.MVFR;
+    } else if (visibility > 5 && cloudLevel > 30) {
+      this.FaaFlightRules = FaaFlightRules.VFR;
     } else {
       this.FaaFlightRules = FaaFlightRules.UNKNOWN;
     }
