@@ -44,22 +44,24 @@ export class vAtisStatusController extends BaseController {
 
   //#region Getters and setters
   /**
-   * Returns the showTitle setting, or false if undefined.
+   * Gets the showTitle setting.
+   * @returns {boolean} The setting, or false if undefined.
    */
-  get showTitle() {
+  get showTitle(): boolean {
     return this.settings.showTitle ?? false;
   }
 
   /**
-   * Convenience method to return the action's title from settings.
+   * Gets the title setting.
+   * @returns {string | undefined} The title, or undefined if none specified.
    */
-  get title() {
+  get title(): string | undefined {
     return this.settings.title;
   }
 
   /**
-   * Returns the notConnectedImagePath or the default template path if the
-   * user didn't specify a custom icon.
+   * Returns the notConnectedImagePath setting.
+   * @returns { string } The path, or defaultTemplatePath if undefined.
    */
   get notConnectedImagePath(): string {
     return this._notConnectedImagePath ?? defaultTemplatePath;
@@ -73,8 +75,8 @@ export class vAtisStatusController extends BaseController {
   }
 
   /**
-   * Returns the connectedImagePath or the default template path if the
-   * user didn't specify a custom icon.
+   * Returns the connectedImagePath setting.
+   * @returns { string } The path, or defaultTemplatePath if undefined.
    */
   get connectedImagePath(): string {
     return this._connectedImagePath ?? defaultTemplatePath;
@@ -89,8 +91,9 @@ export class vAtisStatusController extends BaseController {
 
   /**
    * Gets the settings.
+   * @returns { vAtisStatusSettings } The settings.
    */
-  get settings() {
+  get settings(): vAtisStatusSettings {
     if (this._settings === null) {
       throw new Error("Settings not initialized. This should never happen.");
     }
@@ -112,14 +115,15 @@ export class vAtisStatusController extends BaseController {
   }
 
   /**
-   * Returns true when the connected state is displayed.
+   * Gets the isConnected state.
+   * @returns {boolean} True if connected to vATIS.
    */
-  get isConnected() {
+  get isConnected(): boolean {
     return this._isConnected;
   }
 
   /**
-   * Sets the isConnected state
+   * Sets the isConnected state.
    */
   set isConnected(newValue: boolean) {
     // Don't do anything if the state is the same
@@ -130,7 +134,6 @@ export class vAtisStatusController extends BaseController {
     this._isConnected = newValue;
     this.refreshDisplay();
   }
-
   //#endregion
 
   /**
@@ -145,7 +148,7 @@ export class vAtisStatusController extends BaseController {
   }
 
   /**
-   * Sets the action image based on the isConnected state
+   * Sets the action image based on the isConnected state.
    */
   private refreshImage() {
     const replacements = {

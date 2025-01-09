@@ -98,21 +98,23 @@ export class AtisLetterController extends BaseController {
 
   //#region Getters and setters
   /**
-   * Gets isConnected, which is true if the connection status is Connected.
+   * Gets the isConnected state.
+   * @returns {boolean} True if the connection status is NetworkConnectionStatus.Connected.
    */
-  get isConnected() {
+  get isConnected(): boolean {
     return this._connectionStatus === NetworkConnectionStatus.Connected;
   }
 
   /**
    * Gets the connectionStatus.
+   * @returns {NetworkConnectionStatus | undefined } The network connection status or undefined if no status is available.
    */
-  get connectionStatus() {
+  get connectionStatus(): NetworkConnectionStatus | undefined {
     return this._connectionStatus;
   }
 
   /*
-   * Sets the connectionStatus and updates the action state.
+   * Sets the connectionStatus and updates the action display.
    */
   set connectionStatus(newValue: NetworkConnectionStatus | undefined) {
     if (this._connectionStatus === newValue) {
@@ -141,7 +143,7 @@ export class AtisLetterController extends BaseController {
   }
 
   /**
-   * Sets the FAA flight rules for the current ATIS.
+   * Sets the FAA flight rules for the current ATIS and updates the action display.
    */
   set faaFlightRules(newValue: FaaFlightRules) {
     if (this._faaFlightRules === newValue) {
@@ -274,8 +276,7 @@ export class AtisLetterController extends BaseController {
   }
 
   /**
-   * Sets the settings. Also updates the private icon paths and
-   * compiled SVGs.
+   * Sets the settings. Updates the image paths and refreshes the action display.
    */
   set settings(newValue: AtisLetterSettings) {
     this._settings = newValue;
@@ -297,7 +298,7 @@ export class AtisLetterController extends BaseController {
   }
 
   /**
-   * Sets the isNewAtis state on the action and refreshes the state image to match.
+   * Sets the isNewAtis state and refreshes the action dipslay.
    */
   public set isNewAtis(newValue: boolean) {
     this._isNewAtis = newValue;
@@ -314,7 +315,7 @@ export class AtisLetterController extends BaseController {
   }
 
   /**
-   * Sets the current ATIS letter.
+   * Sets the current ATIS letter and refreshes the action display.
    */
   set letter(newLetter: string | undefined) {
     this._letter = newLetter;
@@ -331,7 +332,7 @@ export class AtisLetterController extends BaseController {
   }
 
   /**
-   * Sets the current wind.
+   * Sets the current wind and refreshes the action display.
    */
   set wind(newWind: string | undefined) {
     this._wind = newWind;
@@ -348,7 +349,7 @@ export class AtisLetterController extends BaseController {
   }
 
   /**
-   * Sets the current altimeter.
+   * Sets the current altimeter and refreshes the action display.
    */
   set altimeter(newAltimeter: string | undefined) {
     this._altimeter = newAltimeter;
@@ -365,7 +366,7 @@ export class AtisLetterController extends BaseController {
   }
 
   /**
-   * Sets the current pressure.
+   * Sets the current pressure and refreshes the action display.
    */
   set pressure(newValue: Value | undefined) {
     this._pressure = newValue;
@@ -383,7 +384,7 @@ export class AtisLetterController extends BaseController {
   //#endregion
 
   /**
-   * Updates the controller with new ATIS data.
+   * Updates the controller with new ATIS data and refreshes the action display.
    * @param data The new ATIS data
    */
   public updateAtis(data: Atis) {
