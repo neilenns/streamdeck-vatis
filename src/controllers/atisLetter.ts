@@ -15,6 +15,8 @@ import { BaseController } from "./baseController";
 const defaultTemplatePath = "images/actions/atisLetter/template.svg";
 const defaultUnavailableTemplatePath = "images/actions/atisLetter/template.svg";
 
+const MAX_CLOUD_LEVEL = 9999;
+
 /**
  * Flight rules categories according to FAA standards
  */
@@ -23,7 +25,7 @@ enum FaaFlightRules {
   MVFR = "MVFR", // Marginal Visual Flight Rules
   IFR = "IFR", // Instrument Flight Rules
   LIFR = "LIFR", // Low Instrument Flight Rules
-  UNKNOWN = "Unknown", // Flight rules couldn't be calculated
+  UNKNOWN = "UNKNOWN", // Flight rules couldn't be calculated
 }
 
 /**
@@ -120,14 +122,14 @@ export class AtisLetterController extends BaseController {
   /**
    * Returns the FAA flight rules for the current ATIS.
    */
-  get FaaFlightRules() {
+  get faaFlightRules() {
     return this._faaFlightRules;
   }
 
   /**
    * Sets the FAA flight rules for the current ATIS.
    */
-  set FaaFlightRules(newValue: FaaFlightRules) {
+  set faaFlightRules(newValue: FaaFlightRules) {
     if (this._faaFlightRules === newValue) {
       return;
     }
@@ -409,7 +411,7 @@ export class AtisLetterController extends BaseController {
       station: this.station,
       title: this.title,
       wind: this.wind,
-      faaFlightRules: this.FaaFlightRules,
+      faaFlightRules: this.faaFlightRules,
     };
 
     if (this.isNewAtis) {
@@ -436,31 +438,36 @@ export class AtisLetterController extends BaseController {
   ) {
     // No visiblity data means the flight rules can't be calculated.
     if (!prevailingVisibility) {
-      this.FaaFlightRules = FaaFlightRules.UNKNOWN;
+      this.faaFlightRules = FaaFlightRules.UNKNOWN;
       return;
     }
 
-    const cloudLevel = ceiling?.actualValue ?? 9999; // If no ceiling is provided assume it is really high so the tests work out
+    const cloudLevel = ceiling?.actualValue ?? MAX_CLOUD_LEVEL; // If no ceiling is provided assume it is really high so the tests work out
     const visibility = prevailingVisibility.actualValue;
+
+    if (visibility < 0 || cloudLevel < 0) {
+      this.faaFlightRules = FaaFlightRules.UNKNOWN;
+      return;
+    }
 
     // The checks are in this order to ensure the most restrctive, rather than least restrictive,
     // is applied. Values from https://www.faasafety.gov/files/gslac/courses/content/38/472/6.2%20Personal%20Minimums%20Worksheet.pdf
     if (visibility < 1 || cloudLevel < 5) {
-      this.FaaFlightRules = FaaFlightRules.LIFR;
+      this.faaFlightRules = FaaFlightRules.LIFR;
     } else if (
       (visibility >= 1 && visibility < 3) ||
       (cloudLevel >= 5 && cloudLevel < 10)
     ) {
-      this.FaaFlightRules = FaaFlightRules.IFR;
+      this.faaFlightRules = FaaFlightRules.IFR;
     } else if (
       (visibility >= 3 && visibility <= 5) ||
       (cloudLevel >= 10 && cloudLevel <= 30)
     ) {
-      this.FaaFlightRules = FaaFlightRules.MVFR;
+      this.faaFlightRules = FaaFlightRules.MVFR;
     } else if (visibility > 5 && cloudLevel > 30) {
-      this.FaaFlightRules = FaaFlightRules.VFR;
+      this.faaFlightRules = FaaFlightRules.VFR;
     } else {
-      this.FaaFlightRules = FaaFlightRules.UNKNOWN;
+      this.faaFlightRules = FaaFlightRules.UNKNOWN;
     }
   }
 

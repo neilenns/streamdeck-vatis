@@ -12,17 +12,17 @@ export enum AtisType {
 }
 
 export enum Unit {
-  Degree = "deg",
-  DegreeCelcius = "deg C",
-  Feet = "ft",
-  HectoPascal = "hPa",
-  KilometerPerHour = "km/h",
-  Knot = "kt",
+  Degree = "Degree",
+  DegreeCelsius = "DegreeCelcius",
+  Feet = "Feet",
+  HectoPascal = "HectoPascal",
+  KilometerPerHour = "KilometerPerHour",
+  Knot = "Knot",
   MercuryInch = "MercuryInch",
-  Meter = "m",
-  MeterPerSecond = "m/s",
-  StatueMile = "SM",
-  UnknownUnit = "N/A",
+  Meter = "Meter",
+  MeterPerSecond = "MeterPerSecond",
+  StatuteMile = "StatuteMile",
+  UnknownUnit = "UnknownUnit",
 }
 
 export interface Value {
