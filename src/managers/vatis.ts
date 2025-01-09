@@ -46,7 +46,7 @@ class VatisManager extends EventEmitter {
 
   /**
    * Sets the connection URL for vATIS.
-   * @param {stirng} url The URL for the vATIS instance
+   * @param {string} url The URL for the vATIS instance
    */
   public setUrl(url: string) {
     this.url = url;
