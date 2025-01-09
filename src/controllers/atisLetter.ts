@@ -455,6 +455,7 @@ export class AtisLetterController extends BaseController {
 
     // The checks are in this order to ensure the most restrictive, rather than least restrictive,
     // is applied. Values from https://www.faasafety.gov/files/gslac/courses/content/38/472/6.2%20Personal%20Minimums%20Worksheet.pdf
+    // Cloud levels are in 100s of feet.
     if (visibility < 1 || cloudLevel < 5) {
       this.faaFlightRules = FaaFlightRules.LIFR;
     } else if (
