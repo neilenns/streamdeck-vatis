@@ -85,15 +85,7 @@ class ActionManager extends EventEmitter {
           action.atisType === data.value.atisType
       )
       .forEach((action) => {
-        action.connectionStatus = data.value.networkConnectionStatus;
-        action.letter = data.value.atisLetter;
-        action.isNewAtis = data.value.isNewAtis ?? false;
-        action.wind = data.value.wind;
-        action.altimeter = data.value.altimeter;
-        action.pressureUnit = data.value.pressureUnit;
-        action.pressureValue = data.value.pressureValue;
-
-        action.refreshDisplay();
+        action.updateAtis(data);
       });
   }
 

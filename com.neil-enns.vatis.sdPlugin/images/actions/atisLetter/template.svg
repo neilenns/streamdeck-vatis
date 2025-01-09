@@ -22,6 +22,16 @@
 	</defs>
 
 	<rect class="background" width="144" height="144"/>
+	{{#if (eq faaFlightRules "VFR")}}
+		<circle cx="18" cy="27" r="10" fill="#28a745" />
+	{{else if (eq faaFlightRules "MVFR")}}
+		<rect x="12" y="20" width="18" height="18" fill="#0080f0" />
+	{{else if (eq faaFlightRules "IFR")}}
+		<polygon points="18,17 8,37 28,37" fill="#dc3545" />
+	{{else if (eq faaFlightRules "LIFR")}}
+		<polygon points="18,16 8,27 18,38 28,27" fill="#9722ce" />
+	{{/if}}
+
 	<text class="displayText" x="72" y="36" font-family="Verdana" font-weight="bold" font-size="22"
 		text-anchor="middle">{{title}}</text>
 	<text class="displayText" x="72" y="92" font-family="Verdana" font-weight="bold" font-size="50"

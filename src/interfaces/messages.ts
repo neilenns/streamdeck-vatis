@@ -11,18 +11,23 @@ export enum AtisType {
   Arrival = "Arrival",
 }
 
-export enum PressureUnit {
-  Degree = "deg",
-  DegreeCelcius = "deg C",
-  Feet = "ft",
-  HectoPascal = "hPa",
-  KilometerPerHour = "km/h",
-  Knot = "kt",
+export enum Unit {
+  Degree = "Degree",
+  DegreeCelsius = "DegreeCelcius",
+  Feet = "Feet",
+  HectoPascal = "HectoPascal",
+  KilometerPerHour = "KilometerPerHour",
+  Knot = "Knot",
   MercuryInch = "MercuryInch",
-  Meter = "m",
-  MeterPerSecond = "m/s",
-  StatueMile = "SM",
-  UnknownUnit = "N/A",
+  Meter = "Meter",
+  MeterPerSecond = "MeterPerSecond",
+  StatuteMile = "StatuteMile",
+  UnknownUnit = "UnknownUnit",
+}
+
+export interface Value {
+  actualValue: number;
+  actualUnit: Unit;
 }
 
 export interface Atis {
@@ -37,8 +42,9 @@ export interface Atis {
     altimeter?: string;
     isNewAtis?: boolean;
     atisLetter?: string;
-    pressureValue?: number;
-    pressureUnit?: PressureUnit;
+    pressure?: Value;
+    ceiling?: Value;
+    prevailingVisibility?: Value;
   };
 }
 
