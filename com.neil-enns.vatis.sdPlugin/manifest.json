@@ -36,6 +36,10 @@
       ]
     }
   ],
+  "ApplicationsToMonitor": {
+    "mac": ["org.vatsim.vatis"],
+    "windows": ["vATIS.exe"]
+  },
   "Category": "vATIS",
   "CategoryIcon": "images/plugin/categoryIcon",
   "CodePath": "bin/plugin.js",

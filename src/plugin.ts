@@ -12,6 +12,8 @@ import { AtisLetter } from "@actions/atisLetter";
 import { handleAtisLetterAdded } from "@events/action/atisLetterAdded";
 import { handleAtisLetterUpdated } from "@events/action/atisLetterUpdated";
 import { handleAtisUpdate } from "@events/vAtis/atisUpdate";
+import { handleOnApplicationDidLaunch } from "@events/streamdeck/applicationDidLaunch";
+import { handleOnApplicationDidTerminate } from "@events/streamdeck/applicationDidTerminate";
 
 const logger = mainLogger.child({ service: "plugin" });
 
@@ -28,6 +30,9 @@ streamDeck.actions.registerAction(new vAtisAudioStatus());
 streamDeck.actions.registerAction(new AtisLetter());
 
 // Register event handlers
+streamDeck.system.onApplicationDidLaunch(handleOnApplicationDidLaunch);
+streamDeck.system.onApplicationDidTerminate(handleOnApplicationDidTerminate);
+
 vAtisManager.on("connected", () => {
   disconnectHandled = false;
   handleConnected();
