@@ -491,7 +491,7 @@ export class AtisLetterController extends BaseController {
       connectionStatus: this.connectionStatus,
       isConnected:
         this.connectionStatus === NetworkConnectionStatus.Connected ||
-        NetworkConnectionStatus.Observer,
+        this.connectionStatus === NetworkConnectionStatus.Observer,
       isNewAtis: this.isNewAtis,
       letter: this.letter,
       pressure: {
