@@ -98,14 +98,6 @@ export class AtisLetterController extends BaseController {
 
   //#region Getters and setters
   /**
-   * Gets the isConnected state.
-   * @returns {boolean} True if the connection status is NetworkConnectionStatus.Connected.
-   */
-  get isConnected(): boolean {
-    return this._connectionStatus === NetworkConnectionStatus.Connected;
-  }
-
-  /**
    * Gets the connectionStatus.
    * @returns {NetworkConnectionStatus | undefined } The network connection status or undefined if no status is available.
    */
