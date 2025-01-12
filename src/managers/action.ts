@@ -9,7 +9,6 @@ import {
 import { ActionContext } from "@elgato/streamdeck";
 import { Controller } from "@interfaces/controller";
 import { Atis } from "@interfaces/messages";
-import vAtisManager from "@managers/vatis";
 import mainLogger from "@utils/logger";
 import { EventEmitter } from "events";
 
@@ -63,12 +62,12 @@ class ActionManager extends EventEmitter {
   }
 
   /**
-   * Updates the connection state on all vATIS status buttons to the current connected states
-   * and updates the background image to the appropriate state image.
+   * Updates the background image to the appropriate state image on all
+   * vATIS status controllers.
    */
   public updatevAtisConnectionState() {
     this.getvAtisStatusControllers().forEach((entry) => {
-      entry.isConnected = vAtisManager.isConnected;
+      entry.refreshDisplay();
     });
   }
 

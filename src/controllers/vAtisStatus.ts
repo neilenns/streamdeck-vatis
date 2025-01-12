@@ -1,18 +1,18 @@
 import { vAtisStatusSettings } from "@actions/vAtisStatus";
 import { KeyAction } from "@elgato/streamdeck";
 import { Controller } from "@interfaces/controller";
+import vatisManager from "@managers/vatis";
+import { VATIS_STATUS_CONTROLLER_TYPE } from "@utils/controllerTypes";
 import TitleBuilder from "@utils/titleBuilder";
 import { stringOrUndefined } from "@utils/utils";
-import { BaseController } from "./baseController";
 import debounce from "debounce";
-import { VATIS_STATUS_CONTROLLER_TYPE } from "@utils/controllerTypes";
+import { BaseController } from "./baseController";
 
 const defaultTemplatePath = "images/actions/vAtisStatus/template.svg";
 
 export class vAtisStatusController extends BaseController {
   type = VATIS_STATUS_CONTROLLER_TYPE;
 
-  private _isConnected = false;
   private _settings: vAtisStatusSettings | null = null;
 
   private _notConnectedImagePath?: string;
@@ -39,7 +39,7 @@ export class vAtisStatusController extends BaseController {
    * Resets the state to default.
    */
   public reset() {
-    this.isConnected = false;
+    this.refreshDisplay();
   }
 
   //#region Getters and setters
@@ -113,27 +113,6 @@ export class vAtisStatusController extends BaseController {
 
     this.refreshDisplay();
   }
-
-  /**
-   * Gets the isConnected state.
-   * @returns {boolean} True if connected to vATIS.
-   */
-  get isConnected(): boolean {
-    return this._isConnected;
-  }
-
-  /**
-   * Sets the isConnected state.
-   */
-  set isConnected(newValue: boolean) {
-    // Don't do anything if the state is the same
-    if (this._isConnected === newValue) {
-      return;
-    }
-
-    this._isConnected = newValue;
-    this.refreshDisplay();
-  }
   //#endregion
 
   /**
@@ -152,11 +131,11 @@ export class vAtisStatusController extends BaseController {
    */
   private refreshImage() {
     const replacements = {
-      isConnected: this.isConnected,
+      isConnected: vatisManager.isConnected,
       title: this.title,
     };
 
-    if (this.isConnected) {
+    if (vatisManager.isConnected) {
       this.setImage(this.connectedImagePath, replacements);
       return;
     }
