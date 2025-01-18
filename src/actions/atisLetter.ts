@@ -83,9 +83,9 @@ export class AtisLetter extends SingletonAction<AtisLetterSettings> {
 }
 
 export enum FlightRuleDisplay {
-  NONE,
-  FAA,
-  ICAO,
+  NONE = "NONE",
+  FAA = "FAA",
+  ICAO = "ICAO",
 }
 
 export interface AtisLetterSettings {

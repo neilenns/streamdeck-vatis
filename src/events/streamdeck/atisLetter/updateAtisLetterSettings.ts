@@ -23,7 +23,8 @@ export const handleUpdateAtisLetterSettings = (
 
   const requiresRefresh =
     savedAction.settings.station !== settings.station ||
-    savedAction.settings.atisType !== settings.atisType;
+    savedAction.settings.atisType !== settings.atisType ||
+    savedAction.settings.showFlightRules !== settings.showFlightRules;
 
   savedAction.settings = settings;
 

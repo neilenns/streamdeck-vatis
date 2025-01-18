@@ -22,7 +22,7 @@
 	</defs>
 
 	<rect class="background" width="144" height="144"/>
-	{{#if showFaaFlightRules}}
+	{{#if (eq showFlightRules "FAA")}}
 		{{#if (eq faaFlightRules "VFR")}}
 			<circle cx="18" cy="27" r="10" fill="#28a745" />
 		{{else if (eq faaFlightRules "MVFR")}}
@@ -33,7 +33,15 @@
 			<polygon points="18,16 8,27 18,38 28,27" fill="#9722ce" />
 		{{/if}}
 	{{/if}}
-	
+
+	{{#if (eq showFlightRules "ICAO")}}
+		{{#if (eq icaoFlightRules "VMC")}}
+			<circle cx="18" cy="27" r="10" fill="#28a745" />
+		{{else if (eq icaoFlightRules "IMC")}}
+			<polygon points="18,17 8,37 28,37" fill="#dc3545" />
+		{{/if}}
+	{{/if}}
+
 	<text class="displayText" x="72" y="36" font-family="Verdana" font-weight="bold" font-size="22"
 		text-anchor="middle">{{title}}</text>
 	<text class="displayText" x="72" y="92" font-family="Verdana" font-weight="bold" font-size="50"

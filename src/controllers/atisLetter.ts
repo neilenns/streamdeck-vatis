@@ -422,6 +422,7 @@ export class AtisLetterController extends BaseController {
     this.altimeter = value.altimeter;
     this.pressure = value.pressure;
     this.calculateFaaFlightRules(value.ceiling, value.prevailingVisibility);
+    this.calculateIcaoFlightRules(value.ceiling, value.prevailingVisibility);
     this.enableUpdates();
 
     this.refreshDisplay();
