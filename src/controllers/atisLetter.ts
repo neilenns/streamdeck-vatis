@@ -431,7 +431,7 @@ export class AtisLetterController extends BaseController {
   /**
    * Calculates ICAO flight rules based on ceiling and visibility values.
    * @param {Value | undefined} ceiling - The ceiling height in hundreds of feet.
-   * @param {Value | undefined} prevailingVisibility - The visibility in statute miles.
+   * @param {Value | undefined} prevailingVisibility - The visibility in meters.
    * @private
    */
   private calculateIcaoFlightRules(
@@ -452,9 +452,9 @@ export class AtisLetterController extends BaseController {
       };
     }
 
-    // Rules are only applicable to statute miles and feet
+    // Rules are only applicable to meters and feet
     if (
-      prevailingVisibility.actualUnit !== Unit.StatuteMile ||
+      prevailingVisibility.actualUnit !== Unit.Meter ||
       ceiling.actualUnit !== Unit.Feet
     ) {
       this.icaoFlightRules = IcaoFlightRules.UNKNOWN;
@@ -471,8 +471,9 @@ export class AtisLetterController extends BaseController {
 
     // The checks are in this order to ensure the most restrictive, rather than least restrictive,
     // is applied.
+    // Visibility is in meters.
     // Cloud levels are in 100s of feet.
-    if (visibility < 5 || cloudLevel < 1500) {
+    if (visibility < 5000 || cloudLevel < 1500) {
       this.icaoFlightRules = IcaoFlightRules.IMC;
     } else {
       this.icaoFlightRules = IcaoFlightRules.VMC;
