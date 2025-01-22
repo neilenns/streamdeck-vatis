@@ -473,7 +473,7 @@ export class AtisLetterController extends BaseController {
     // is applied.
     // Visibility is in meters.
     // Cloud levels are in 100s of feet.
-    if (visibility < 5000 || cloudLevel < 1500) {
+    if (visibility < 5000 || cloudLevel < 150) {
       this.icaoFlightRules = IcaoFlightRules.IMC;
     } else {
       this.icaoFlightRules = IcaoFlightRules.VMC;
