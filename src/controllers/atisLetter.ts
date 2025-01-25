@@ -18,9 +18,14 @@ const defaultTemplatePath = "images/actions/atisLetter/template.svg";
 const defaultUnavailableTemplatePath = "images/actions/atisLetter/template.svg";
 
 /**
- * Maximum cloud level in feet. Used as a fallback when no ceiling data is available.
+ * Default cloud level in feet. Used as a fallback when no ceiling data is available.
  */
 const DEFAULT_CEILING_LEVEL_FEET = 9999;
+
+/**
+ * Default visibility in meters. Used as a fallback when no visibility data is available.
+ */
+const DEFAULT_VISIBILITY_METERS = 9999;
 
 /**
  * Flight rules categories according to FAA standards
@@ -438,10 +443,12 @@ export class AtisLetterController extends BaseController {
     ceiling?: Value,
     prevailingVisibility?: Value
   ) {
-    // No visibility data means the flight rules can't be calculated.
+    // No visibility data might mean CAVOK so assume unlimited visibility.
     if (!prevailingVisibility) {
-      this.icaoFlightRules = IcaoFlightRules.UNKNOWN;
-      return;
+      prevailingVisibility = {
+        actualValue: DEFAULT_VISIBILITY_METERS,
+        actualUnit: Unit.Meter,
+      };
     }
 
     // If the ceiling is null then set it to the default.
@@ -452,7 +459,7 @@ export class AtisLetterController extends BaseController {
       };
     }
 
-    // Rules are only applicable to meters and feet
+    // Rules are only applicable to meters and feet.
     if (
       prevailingVisibility.actualUnit !== Unit.Meter ||
       ceiling.actualUnit !== Unit.Feet
@@ -473,7 +480,7 @@ export class AtisLetterController extends BaseController {
     // is applied.
     // Visibility is in meters.
     // Cloud levels are in 100s of feet.
-    if (visibility < 5000 || cloudLevel < 150) {
+    if (visibility < 5000 || cloudLevel < 15) {
       this.icaoFlightRules = IcaoFlightRules.IMC;
     } else {
       this.icaoFlightRules = IcaoFlightRules.VMC;
