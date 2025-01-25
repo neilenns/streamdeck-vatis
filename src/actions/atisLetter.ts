@@ -82,13 +82,19 @@ export class AtisLetter extends SingletonAction<AtisLetterSettings> {
   }
 }
 
+export enum FlightRuleDisplay {
+  NONE = "NONE",
+  FAA = "FAA",
+  ICAO = "ICAO",
+}
+
 export interface AtisLetterSettings {
   atisType?: AtisType;
   showAltimeter?: boolean;
   showWind?: boolean;
   currentImagePath?: string;
   observerImagePath?: string;
-  showFaaFlightRules?: boolean;
+  showFlightRules?: FlightRuleDisplay;
   showLetter?: boolean;
   showTitle?: boolean;
   station?: string;

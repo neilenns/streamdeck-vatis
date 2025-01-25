@@ -1,4 +1,4 @@
-import { AtisLetterSettings } from "@actions/atisLetter";
+import { AtisLetterSettings, FlightRuleDisplay } from "@actions/atisLetter";
 import { KeyAction } from "@elgato/streamdeck";
 import { Controller } from "@interfaces/controller";
 import {
@@ -10,17 +10,22 @@ import {
 } from "@interfaces/messages";
 import TitleBuilder from "@root/utils/titleBuilder";
 import { stringOrUndefined } from "@root/utils/utils";
+import { ATIS_LETTER_CONTROLLER_TYPE } from "@utils/controllerTypes";
 import debounce from "debounce";
 import { BaseController } from "./baseController";
-import { ATIS_LETTER_CONTROLLER_TYPE } from "@utils/controllerTypes";
 
 const defaultTemplatePath = "images/actions/atisLetter/template.svg";
 const defaultUnavailableTemplatePath = "images/actions/atisLetter/template.svg";
 
 /**
- * Maximum cloud level in feet. Used as a fallback when no ceiling data is available.
+ * Default cloud level in feet. Used as a fallback when no ceiling data is available.
  */
 const DEFAULT_CEILING_LEVEL_FEET = 9999;
+
+/**
+ * Default visibility in meters. Used as a fallback when no visibility data is available.
+ */
+const DEFAULT_VISIBILITY_METERS = 9999;
 
 /**
  * Flight rules categories according to FAA standards
@@ -30,6 +35,15 @@ enum FaaFlightRules {
   MVFR = "MVFR", // Marginal Visual Flight Rules
   IFR = "IFR", // Instrument Flight Rules
   LIFR = "LIFR", // Low Instrument Flight Rules
+  UNKNOWN = "UNKNOWN", // Flight rules couldn't be calculated
+}
+
+/**
+ * Flight rules categories according to ICAO standards
+ */
+enum IcaoFlightRules {
+  IMC = "IMC", // Instrument flight conditions
+  VMC = "VMC", // Visual flight conditions
   UNKNOWN = "UNKNOWN", // Flight rules couldn't be calculated
 }
 
@@ -47,6 +61,7 @@ export class AtisLetterController extends BaseController {
   private _altimeter?: string;
   private _pressure?: Value;
   private _faaFlightRules: FaaFlightRules = FaaFlightRules.UNKNOWN;
+  private _icaoFlightRules: IcaoFlightRules = IcaoFlightRules.UNKNOWN;
 
   private _suppressUpdates: boolean;
   private _settings: AtisLetterSettings | null = null;
@@ -92,6 +107,7 @@ export class AtisLetterController extends BaseController {
     this._pressure = undefined;
     this._suppressUpdates = false;
     this._faaFlightRules = FaaFlightRules.UNKNOWN;
+    this._icaoFlightRules = IcaoFlightRules.UNKNOWN;
 
     this.refreshDisplay();
   }
@@ -119,11 +135,11 @@ export class AtisLetterController extends BaseController {
   }
 
   /**
-   * Gets the show FAA flight rules setting.
-   * @returns {boolean} True if the flight rules indicator should show. Defaults to true if no setting is provided.
+   * Gets the show flight rules setting.
+   * @returns {FlightRuleDisplay} The type of flight rules indicator to show. Defaults to FAA if no setting is provided.
    */
-  get showFaaFlightRules(): boolean {
-    return this.settings.showFaaFlightRules ?? true;
+  get showFlightRules(): FlightRuleDisplay {
+    return this.settings.showFlightRules ?? FlightRuleDisplay.FAA;
   }
 
   /**
@@ -143,6 +159,27 @@ export class AtisLetterController extends BaseController {
     }
 
     this._faaFlightRules = newValue;
+
+    this.refreshDisplay();
+  }
+
+  /**
+   * Gets the ICAO flight rules for the current ATIS.
+   * @returns {IcaoFlightRules} The current ICAO flight rules.
+   */
+  get icaoFlightRules(): IcaoFlightRules {
+    return this._icaoFlightRules;
+  }
+
+  /**
+   * Sets the ICAO flight rules for the current ATIS and updates the action display.
+   */
+  set icaoFlightRules(newValue: IcaoFlightRules) {
+    if (this._icaoFlightRules === newValue) {
+      return;
+    }
+
+    this._icaoFlightRules = newValue;
 
     this.refreshDisplay();
   }
@@ -290,7 +327,7 @@ export class AtisLetterController extends BaseController {
   }
 
   /**
-   * Sets the isNewAtis state and refreshes the action dipslay.
+   * Sets the isNewAtis state and refreshes the action display.
    */
   public set isNewAtis(newValue: boolean) {
     this._isNewAtis = newValue;
@@ -390,9 +427,64 @@ export class AtisLetterController extends BaseController {
     this.altimeter = value.altimeter;
     this.pressure = value.pressure;
     this.calculateFaaFlightRules(value.ceiling, value.prevailingVisibility);
+    this.calculateIcaoFlightRules(value.ceiling, value.prevailingVisibility);
     this.enableUpdates();
 
     this.refreshDisplay();
+  }
+
+  /**
+   * Calculates ICAO flight rules based on ceiling and visibility values.
+   * @param {Value | undefined} ceiling - The ceiling height in hundreds of feet.
+   * @param {Value | undefined} prevailingVisibility - The visibility in meters.
+   * @private
+   */
+  private calculateIcaoFlightRules(
+    ceiling?: Value,
+    prevailingVisibility?: Value
+  ) {
+    // No visibility data might mean CAVOK so assume unlimited visibility.
+    if (!prevailingVisibility) {
+      prevailingVisibility = {
+        actualValue: DEFAULT_VISIBILITY_METERS,
+        actualUnit: Unit.Meter,
+      };
+    }
+
+    // If the ceiling is null then set it to the default.
+    if (!ceiling) {
+      ceiling = {
+        actualValue: DEFAULT_CEILING_LEVEL_FEET,
+        actualUnit: Unit.Feet,
+      };
+    }
+
+    // Rules are only applicable to meters and feet.
+    if (
+      prevailingVisibility.actualUnit !== Unit.Meter ||
+      ceiling.actualUnit !== Unit.Feet
+    ) {
+      this.icaoFlightRules = IcaoFlightRules.UNKNOWN;
+      return;
+    }
+
+    const cloudLevel = ceiling.actualValue;
+    const visibility = prevailingVisibility.actualValue;
+
+    if (visibility < 0 || cloudLevel < 0) {
+      this.icaoFlightRules = IcaoFlightRules.UNKNOWN;
+      return;
+    }
+
+    // The checks are in this order to ensure the most restrictive, rather than least restrictive,
+    // is applied.
+    // Visibility is in meters.
+    // Cloud levels are in 100s of feet.
+    if (visibility < 5000 || cloudLevel < 15) {
+      this.icaoFlightRules = IcaoFlightRules.IMC;
+    } else {
+      this.icaoFlightRules = IcaoFlightRules.VMC;
+    }
   }
 
   /**
@@ -495,7 +587,8 @@ export class AtisLetterController extends BaseController {
       title: this.title,
       wind: this.wind,
       faaFlightRules: this.faaFlightRules,
-      showFaaFlightRules: this.showFaaFlightRules,
+      icaoFlightRules: this.icaoFlightRules,
+      showFlightRules: this.showFlightRules,
     };
 
     if (this.isNewAtis) {

@@ -33,12 +33,16 @@
       </sdpi-select>
     </sdpi-item>
 
-    <sdpi-item>
-      <sdpi-checkbox
-        setting="showFaaFlightRules"
-        label="Show FAA flight rules indicator"
-        default="true"
-      ></sdpi-checkbox>
+    <sdpi-item label="Flight rules">
+      <sdpi-select
+        setting="showFlightRules"
+        default="FAA"
+        aria-label="Select flight rules display type"
+      >
+        <option value="NONE">None</option>
+        <option value="FAA">FAA</option>
+        <option value="ICAO">ICAO</option>
+      </sdpi-select>
     </sdpi-item>
 
     <sdpi-item label="Current">
