@@ -9,7 +9,6 @@ import {
 import { ActionContext } from "@elgato/streamdeck";
 import { Controller } from "@interfaces/controller";
 import { Atis } from "@interfaces/messages";
-import vAtisManager from "@managers/vatis";
 import mainLogger from "@utils/logger";
 import { EventEmitter } from "events";
 
@@ -68,7 +67,7 @@ class ActionManager extends EventEmitter {
    */
   public updatevAtisConnectionState() {
     this.getvAtisStatusControllers().forEach((entry) => {
-      entry.isConnected = vAtisManager.isConnected;
+      entry.refreshDisplay();
     });
   }
 
