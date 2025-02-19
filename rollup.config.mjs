@@ -32,7 +32,7 @@ const config = {
           process.env.NODE_ENV ?? "production"
         ),
         "process.env.LOG_LEVEL": process.env.LOG_LEVEL
-          ? JSON.stringify(process.env.NODE_ENV)
+          ? JSON.stringify(process.env.LOG_LEVEL)
           : undefined,
       },
     }),
