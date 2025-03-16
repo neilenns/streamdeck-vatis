@@ -1,3 +1,5 @@
+// Types for the vATIS websocket API. For API documentation see https://vatis.app/docs/client/websockets.
+
 export enum NetworkConnectionStatus {
   Connected = "Connected",
   Connecting = "Connecting",
