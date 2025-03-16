@@ -1,3 +1,5 @@
+// Types for the vATIS websocket API. For API documentation see https://vatis.app/docs/client/websockets.
+
 export enum NetworkConnectionStatus {
   Connected = "Connected",
   Connecting = "Connecting",
@@ -48,6 +50,28 @@ export interface Atis {
   };
 }
 
+export interface Profile {
+  id: string;
+  name: string;
+}
+
+export interface Profiles {
+  type: "profiles";
+  value: Profile[];
+}
+
+export interface Station {
+  id: string;
+  name: string;
+  atisType: AtisType;
+  presets: string[];
+}
+
+export interface Stations {
+  type: "stations";
+  value: Station[];
+}
+
 export interface GetAtis {
   type: "getAtis";
   value?: {
@@ -56,12 +80,83 @@ export interface GetAtis {
   };
 }
 
-export interface AcknowledgeAtisUpdate {
-  type: "acknowledgeAtisUpdate";
-  value?: {
-    station: string;
-    atisType: AtisType;
+export interface GetProfiles {
+  type: "getProfiles";
+}
+
+export interface GetStations {
+  type: "getStations";
+}
+
+export interface LoadProfile {
+  type: "loadProfile";
+  value: {
+    profileId: string;
   };
 }
 
-export type OutgoingMessage = GetAtis | AcknowledgeAtisUpdate;
+export interface ConfigureAtis {
+  type: "configureAtis";
+  value:
+    | {
+        airportConditionsFreeText?: string;
+        id: string;
+        notamsFreeText?: string;
+        preset: string;
+      }
+    | {
+        airportConditionsFreeText?: string;
+        atisType: AtisType;
+        notamsFreeText?: string;
+        preset: string;
+        station: string;
+      };
+}
+
+export interface ConnectAtis {
+  type: "connectAtis";
+  value:
+    | {
+        id: string;
+      }
+    | {
+        station: string;
+        atisType: AtisType;
+      };
+}
+
+export interface DisconnectAtis {
+  type: "disconnectAtis";
+  value:
+    | {
+        id: string;
+      }
+    | {
+        station: string;
+        atisType: AtisType;
+      };
+}
+
+export interface Quit {
+  type: "quit";
+}
+
+export interface AcknowledgeAtisUpdate {
+  type: "acknowledgeAtisUpdate";
+  value?: {
+    atisType: AtisType;
+    station: string;
+  };
+}
+
+export type OutgoingMessage =
+  | DisconnectAtis
+  | AcknowledgeAtisUpdate
+  | ConfigureAtis
+  | GetAtis
+  | GetProfiles
+  | GetStations
+  | LoadProfile
+  | Quit;
+
+export type IncomingMessage = Atis | Profiles | Stations;
