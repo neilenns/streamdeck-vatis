@@ -444,20 +444,16 @@ export class AtisLetterController extends BaseController {
     prevailingVisibility?: Value
   ) {
     // No visibility data might mean CAVOK so assume unlimited visibility.
-    if (!prevailingVisibility) {
-      prevailingVisibility = {
-        actualValue: DEFAULT_VISIBILITY_METERS,
-        actualUnit: Unit.Meter,
-      };
-    }
+    prevailingVisibility ??= {
+      actualValue: DEFAULT_VISIBILITY_METERS,
+      actualUnit: Unit.Meter,
+    };
 
     // If the ceiling is null then set it to the default.
-    if (!ceiling) {
-      ceiling = {
-        actualValue: DEFAULT_CEILING_LEVEL_FEET,
-        actualUnit: Unit.Feet,
-      };
-    }
+    ceiling ??= {
+      actualValue: DEFAULT_CEILING_LEVEL_FEET,
+      actualUnit: Unit.Feet,
+    };
 
     // Rules are only applicable to meters and feet.
     if (
@@ -504,12 +500,10 @@ export class AtisLetterController extends BaseController {
     }
 
     // If the ceiling is null then set it to the default.
-    if (!ceiling) {
-      ceiling = {
-        actualValue: DEFAULT_CEILING_LEVEL_FEET,
-        actualUnit: Unit.Feet,
-      };
-    }
+    ceiling ??= {
+      actualValue: DEFAULT_CEILING_LEVEL_FEET,
+      actualUnit: Unit.Feet,
+    };
 
     // FAA rules are only applicable to statute miles and feet
     if (
