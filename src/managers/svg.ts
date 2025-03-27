@@ -44,10 +44,7 @@ class SvgTemplateManager extends EventEmitter {
    * @returns The SVG manager instance
    */
   public static getInstance(): SvgTemplateManager {
-    if (!SvgTemplateManager.instance) {
-      SvgTemplateManager.instance = new SvgTemplateManager();
-    }
-
+    SvgTemplateManager.instance ??= new SvgTemplateManager();
     return SvgTemplateManager.instance;
   }
 

@@ -22,9 +22,7 @@ class VatisManager extends EventEmitter {
    * @returns The instance of VatisManager
    */
   public static getInstance(): VatisManager {
-    if (!VatisManager.instance) {
-      VatisManager.instance = new VatisManager();
-    }
+    VatisManager.instance ??= new VatisManager();
     return VatisManager.instance;
   }
 
