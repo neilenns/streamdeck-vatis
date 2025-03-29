@@ -74,10 +74,14 @@ export interface Stations {
 
 export interface GetAtis {
   type: "getAtis";
-  value?: {
-    station: string;
-    atisType?: AtisType;
-  };
+  value:
+    | {
+        id: string;
+      }
+    | {
+        station: string;
+        atisType?: AtisType;
+      };
 }
 
 export interface GetProfiles {
@@ -91,7 +95,7 @@ export interface GetStations {
 export interface LoadProfile {
   type: "loadProfile";
   value: {
-    profileId: string;
+    id: string;
   };
 }
 
@@ -143,10 +147,14 @@ export interface Quit {
 
 export interface AcknowledgeAtisUpdate {
   type: "acknowledgeAtisUpdate";
-  value?: {
-    atisType: AtisType;
-    station: string;
-  };
+  value?:
+    | {
+        id: string;
+      }
+    | {
+        station: string;
+        atisType?: AtisType;
+      };
 }
 
 export type OutgoingMessage =
