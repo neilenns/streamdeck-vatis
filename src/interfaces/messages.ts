@@ -15,7 +15,7 @@ export enum AtisType {
 
 export enum Unit {
   Degree = "Degree",
-  DegreeCelsius = "DegreeCelcius",
+  DegreeCelsius = "DegreeCelsius",
   Feet = "Feet",
   HectoPascal = "HectoPascal",
   KilometerPerHour = "KilometerPerHour",
@@ -35,18 +35,19 @@ export interface Value {
 export interface Atis {
   type: "atis";
   value: {
-    networkConnectionStatus?: NetworkConnectionStatus;
-    textAtis?: string;
-    station?: string;
-    atisType?: AtisType;
-    metar?: string;
-    wind?: string;
     altimeter?: string;
-    isNewAtis?: boolean;
     atisLetter?: string;
-    pressure?: Value;
+    atisType?: AtisType;
     ceiling?: Value;
+    id: string;
+    isNewAtis?: boolean;
+    metar?: string;
+    networkConnectionStatus?: NetworkConnectionStatus;
+    pressure?: Value;
     prevailingVisibility?: Value;
+    station?: string;
+    textAtis?: string;
+    wind?: string;
   };
 }
 
@@ -74,10 +75,14 @@ export interface Stations {
 
 export interface GetAtis {
   type: "getAtis";
-  value?: {
-    station: string;
-    atisType?: AtisType;
-  };
+  value?:
+    | {
+        id: string;
+      }
+    | {
+        station: string;
+        atisType?: AtisType;
+      };
 }
 
 export interface GetProfiles {
@@ -91,7 +96,7 @@ export interface GetStations {
 export interface LoadProfile {
   type: "loadProfile";
   value: {
-    profileId: string;
+    id: string;
   };
 }
 
@@ -143,10 +148,14 @@ export interface Quit {
 
 export interface AcknowledgeAtisUpdate {
   type: "acknowledgeAtisUpdate";
-  value?: {
-    atisType: AtisType;
-    station: string;
-  };
+  value?:
+    | {
+        id: string;
+      }
+    | {
+        station: string;
+        atisType?: AtisType;
+      };
 }
 
 export type OutgoingMessage =
