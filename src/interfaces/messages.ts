@@ -35,18 +35,19 @@ export interface Value {
 export interface Atis {
   type: "atis";
   value: {
-    networkConnectionStatus?: NetworkConnectionStatus;
-    textAtis?: string;
-    station?: string;
-    atisType?: AtisType;
-    metar?: string;
-    wind?: string;
     altimeter?: string;
-    isNewAtis?: boolean;
     atisLetter?: string;
-    pressure?: Value;
+    atisType?: AtisType;
     ceiling?: Value;
+    id: string;
+    isNewAtis?: boolean;
+    metar?: string;
+    networkConnectionStatus?: NetworkConnectionStatus;
+    pressure?: Value;
     prevailingVisibility?: Value;
+    station?: string;
+    textAtis?: string;
+    wind?: string;
   };
 }
 
