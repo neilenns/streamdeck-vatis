@@ -15,7 +15,7 @@ export enum AtisType {
 
 export enum Unit {
   Degree = "Degree",
-  DegreeCelsius = "DegreeCelcius",
+  DegreeCelsius = "DegreeCelsius",
   Feet = "Feet",
   HectoPascal = "HectoPascal",
   KilometerPerHour = "KilometerPerHour",
@@ -74,7 +74,7 @@ export interface Stations {
 
 export interface GetAtis {
   type: "getAtis";
-  value:
+  value?:
     | {
         id: string;
       }
