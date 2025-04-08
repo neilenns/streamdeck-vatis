@@ -1,13 +1,16 @@
 {
+  "$schema": "https://schemas.elgato.com/streamdeck/plugins/manifest.json",
   "Name": "vATIS",
   "Version": "0.1.0.0",
   "Author": "Neil Enns",
+  "SupportUrl": "https://projects.neilenns.com/docs/streamdeck-vatis/",
   "Actions": [
     {
       "Name": "vATIS status",
       "UUID": "com.neil-enns.vatis.vatisstatus",
       "Icon": "images/actions/vatisstatus/pluginIcon",
       "Tooltip": "Shows the status of the connection to vATIS.",
+      "SupportUrl": "https://projects.neilenns.com/docs/streamdeck-vatis/vatis-status/",
       "DisableAutomaticStates": true,
       "UserTitleEnabled": false,
       "PropertyInspectorPath": "ui/vAtisStatus.html",
@@ -23,7 +26,8 @@
       "Name": "ATIS letter",
       "UUID": "com.neil-enns.vatis.atisletter",
       "Icon": "images/actions/atisLetter/cloud-white",
-      "Tooltip": "Shows the current AITS letter for the specified station.",
+      "Tooltip": "Shows the current ATIS letter for the specified station.",
+      "SupportUrl": "https://projects.neilenns.com/docs/streamdeck-vatis/atis-letter/",
       "DisableAutomaticStates": true,
       "UserTitleEnabled": false,
       "PropertyInspectorPath": "ui/atisLetter.html",
