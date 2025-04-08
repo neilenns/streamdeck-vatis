@@ -3,14 +3,14 @@
   "Name": "vATIS",
   "Version": "0.1.0.0",
   "Author": "Neil Enns",
-  "SupportUrl": "https://projects.neilenns.com/docs/streamdeck-vatis/",
+  "SupportURL": "https://projects.neilenns.com/docs/streamdeck-vatis/",
   "Actions": [
     {
       "Name": "vATIS status",
       "UUID": "com.neil-enns.vatis.vatisstatus",
       "Icon": "images/actions/vatisstatus/pluginIcon",
       "Tooltip": "Shows the status of the connection to vATIS.",
-      "SupportUrl": "https://projects.neilenns.com/docs/streamdeck-vatis/vatis-status/",
+      "SupportURL": "https://projects.neilenns.com/docs/streamdeck-vatis/vatis-status/",
       "DisableAutomaticStates": true,
       "UserTitleEnabled": false,
       "PropertyInspectorPath": "ui/vAtisStatus.html",
@@ -27,7 +27,7 @@
       "UUID": "com.neil-enns.vatis.atisletter",
       "Icon": "images/actions/atisLetter/cloud-white",
       "Tooltip": "Shows the current ATIS letter for the specified station.",
-      "SupportUrl": "https://projects.neilenns.com/docs/streamdeck-vatis/atis-letter/",
+      "SupportURL": "https://projects.neilenns.com/docs/streamdeck-vatis/atis-letter/",
       "DisableAutomaticStates": true,
       "UserTitleEnabled": false,
       "PropertyInspectorPath": "ui/atisLetter.html",
@@ -52,7 +52,7 @@
   "SDKVersion": 2,
   "URL": "https://projects.neilenns.com/docs/streamdeck-vatis/",
   "Software": {
-    "MinimumVersion": "6.4"
+    "MinimumVersion": "6.9"
   },
   "OS": [
     {
