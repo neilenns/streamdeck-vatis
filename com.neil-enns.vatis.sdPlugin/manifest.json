@@ -49,7 +49,7 @@
   "CodePath": "bin/plugin.js",
   "Description": "Provides actions for displaying current ATIS information from vATIS.",
   "Icon": "images/plugin/pluginIcon",
-  "SDKVersion": 2,
+  "SDKVersion": 3,
   "URL": "https://projects.neilenns.com/docs/streamdeck-vatis/",
   "Software": {
     "MinimumVersion": "6.9"
