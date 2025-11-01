@@ -23,7 +23,7 @@
     "cross-env": "^10.0.0",
     "eslint": "^9.17.0",
     "eslint-config-prettier": "^10.0.0",
-    "markdownlint": "^0.38.0",
+    "markdownlint": "^0.39.0",
     "markdownlint-cli": "^0.45.0",
     "rollup": "^4.0.2",
     "tslib": "^2.6.2",
