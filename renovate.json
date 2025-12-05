@@ -25,7 +25,6 @@
       "groupName": "all minor and patch dependencies",
       "groupSlug": "all-minor-patch",
       "matchUpdateTypes": ["minor", "patch"],
-      "matchCurrentVersion": "!/^0/",
       "automerge": true
     },
     {
