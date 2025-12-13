@@ -30,7 +30,7 @@
     {
       "groupName": "github actions",
       "groupSlug": "github-actions",
-      "matchDatasources": ["github-actions"],
+      "labels": ["github-actions"],
       "automerge": true
     }
   ]
