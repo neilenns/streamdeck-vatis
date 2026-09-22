@@ -26,12 +26,6 @@
       "groupSlug": "all-minor-patch",
       "matchUpdateTypes": ["minor", "patch"],
       "automerge": true
-    },
-    {
-      "groupName": "github actions",
-      "groupSlug": "github-actions",
-      "labels": ["github-actions"],
-      "automerge": true
     }
   ]
 }
