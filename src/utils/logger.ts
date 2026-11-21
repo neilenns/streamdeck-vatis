@@ -25,7 +25,9 @@ class Logger {
     this.winston = winston.createLogger({
       level: this.level(),
       transports: [
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-class-instance-assignment
         new winston.transports.Console({ forceConsole: true }),
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-class-instance-assignment
         new StreamdeckTransport({
           scope: "vAtis",
           format: winston.format.printf((info) => {
